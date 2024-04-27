@@ -1,20 +1,20 @@
 .sidebar {
     width: 100px;
-    height: 900px;
+    height: 95vh;
     background-color: #161A1D;
     padding: 20px;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between
+    justify-content: space-between;
 }
 
 .sidebar h1 {
-    font-size: 24px;
+    font-size: 20px;
     color: #D3E763;
     text-align: center;
     cursor: pointer;
-    font-family: 'Poppins-semibold', sans-serif;
+    font-family: 'poppins-regular', sans-serif;
 }
 
 .sidebar ul {
@@ -33,10 +33,9 @@
 
 .sidebar a {
     color: #ffffff;
-    font-size: 20px;
+    font-size: 18px;
     padding: 10px;
     border-radius: 12px;
-    background-color: #589DFB;
     -webkit-border-radius: 12px;
     -moz-border-radius: 12px;
     -ms-border-radius: 12px;
@@ -48,4 +47,9 @@
     cursor: pointer;
     justify-content: center;
     display: flex;
+}
+
+.sidebar a:hover {
+    background-color: #589DFB;
+    color: #ffffff;
 }
