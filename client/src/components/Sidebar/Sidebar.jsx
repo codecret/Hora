@@ -10,12 +10,12 @@ const Sidebar = () => {
       <div>
         <ul>
           <li id="dashboard">
-            <a href="/DashboardPage">
+            <a href="/">
               <Icon icon="majesticons:home-line" width="1.2em" height="1.2em" />
             </a>
           </li>
           <li id="calendar">
-            <a href="/CalendarPage">
+            <a href="/calendar">
               <Icon
                 icon="majesticons:calendar-line"
                 width="1.2em"

@@ -1,9 +1,16 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
+:root {
+  --inputfieldcolor: #f8fafc;
+  --border-radius: 0.25rem;
+  --bodyFont: "Cabin", Sans-Serif;
+  --grey-900: #102a43;
+  --grey-600: #cbd0dd;
+  --textColor: var(--grey-900);
+}
 @font-face {
   font-family: "poppins-semibold";
   src: url(../public/font/Poppins-SemiBold.ttf);
@@ -12,4 +19,30 @@
 @font-face {
   font-family: "poppins-regular";
   src: url(../public/font/Poppins-Regular.ttf);
+}
+body {
+  background-color: #eaeaea;
+  font-family: var(--bodyFont);
+  line-height: 1.75;
+  color: var(--textColor);
+}
+.form-input {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  border-radius: 5px;
+  background-color: var(--inputfieldcolor);
+  border: 1px solid #cbd5e1;
+  color: black;
+}
+.container-full-width-height {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #a9c1ff;
+}
+.btn {
+  outline: none;
+  border: none;
+  cursor: pointer;
 }

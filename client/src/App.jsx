@@ -1,14 +1,21 @@
-// eslint-disable-next-line no-unused-vars
-import React from "react";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
+import CalendarPage from "./pages/CalendarPage/CalendarPage";
+import Layout from "./pages/Layout";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Login/Register";
 
 function App() {
-  
   return (
-    <>
-      <DashboardPage />
-    </>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route element={<Layout />}>
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="calendar" element={<CalendarPage />} />
+      </Route>
+    </Routes>
   );
 }
 
