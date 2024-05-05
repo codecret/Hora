@@ -1,12 +1,31 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { Outlet } from "react-router-dom";
-import Searchbar from "../components/Searchbar/Searchbar";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { useGetAuth } from "../hooks/useAuth";
+import BeatLoader from "react-spinners/BeatLoader";
+import NavBar from "../components/NavBar";
+import { Toaster } from "react-hot-toast";
 
+const override = {
+  display: "block",
+  margin: "auto",
+};
 const Layout = () => {
-  const { data: user } = useGetAuth({ state: "layout" });
-
+  const {
+    data: user,
+    isLoading,
+    isFetching,
+  } = useGetAuth({ state: "protected" });
+  if (isLoading || isFetching) {
+    return (
+      <BeatLoader
+        color="var(--primary-color)"
+        cssOverride={override}
+        size={30}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />
+    );
+  }
   return (
     <main className="dashboard-container">
       <div className="sidebar-left-column">
@@ -14,16 +33,11 @@ const Layout = () => {
       </div>
 
       <div className="dashboard-right-column">
-        <div className="searchbar-container">
-          <Searchbar />
-          <div className="user-name-container">
-            <h3>{user?.name ?? "username"}</h3>
-            <a href="/ProfilePage">
-              <Icon icon="majesticons:user-line" width="1.2em" height="1.2em" />
-            </a>
-          </div>
-        </div>
+        <NavBar user={user} />
         <Outlet user={user} />
+        <div>
+          <Toaster position="bottom-right" reverseOrder={false} />
+        </div>
       </div>
     </main>
   );

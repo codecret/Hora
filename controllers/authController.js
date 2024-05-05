@@ -4,33 +4,30 @@ import { BadRequestError, UnAuthenticatedError } from "../errors/index.js";
 import attachCookie from "../utils/attachCookies.js";
 
 const CreateUser = async (req, res) => {
-  const { username, password, name, phoneNumber, email } = req.body;
-  if (!username || !password || !name) {
+  const { password, name, email } = req.body;
+  console.log(name, email, password);
+  if (!name || !password || !email) {
     throw new BadRequestError("please provide all the values");
   }
-
   const user = await User.create({
-    username,
     name,
     email,
     password,
-    phoneNumber,
   });
-
   res.status(StatusCodes.CREATED).json({
     user: {
-      username: user.username,
+      email: user.email,
     },
     user,
   });
 };
 
 const login = async (req, res) => {
-  const { username, password } = req.body;
-  if ((!username, !password)) {
+  const { email, password } = req.body;
+  if ((!email, !password)) {
     throw new BadRequestError("please provide all values");
   }
-  const user = await User.findOne({ username }).select("+password");
+  const user = await User.findOne({ email }).select("+password");
   if (!user) {
     throw new UnAuthenticatedError("Invalid Credentials , no user!");
   }
@@ -45,13 +42,13 @@ const login = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { username, email } = req.body;
-  if (!username) {
+  const { name, email } = req.body;
+  if (!name) {
     throw new BadRequestError("please provide all the values");
   }
   const user = await User.findOne({ _id: req.user.userId });
 
-  user.username = username;
+  user.name = name;
   user.email = email;
 
   await user.save();
@@ -84,5 +81,17 @@ const deleteUser = async (req, res) => {
   await user.deleteOne();
   res.status(StatusCodes.OK).json({ msg: `Success! User removed` });
 };
+const getCurrentUser = async (req, res) => {
+  const user = await User.findOne({ _id: req.user.userId });
 
-export { CreateUser, allUsers, login, updateUser, logoutUser, deleteUser };
+  res.status(StatusCodes.OK).json({ user });
+};
+export {
+  CreateUser,
+  allUsers,
+  login,
+  updateUser,
+  logoutUser,
+  deleteUser,
+  getCurrentUser,
+};

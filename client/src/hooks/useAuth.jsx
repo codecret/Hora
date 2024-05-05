@@ -22,23 +22,98 @@ export function useGetAuth({ state }) {
     retry: false,
   });
   useEffect(() => {
-    if (query.error && state !== "login" && state !== "register") {
+    if (query.error) {
       navigate("/login");
       return;
     } else if (query.isSuccess) {
       if (state === "login") {
-        if (!query.data.isAdmin) {
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 2000);
-        } else {
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
-        }
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
       }
     }
   }, [query.isError, query.isSuccess, state]);
 
   return query;
 }
+
+const useLoginAuthAsync = ({ email, password }) => {
+  return authFetch.post("/auth/login", {
+    email,
+    password,
+  });
+};
+
+export const useLoginAuth = ({ setLoading }) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: useLoginAuthAsync,
+    onError: (e) => {
+      if (e.response && e.response.status === 401) {
+        toast.error("Username or Password is wrong");
+      } else {
+        toast.error("An error occurred");
+      }
+      setLoading(false);
+    },
+    onSuccess: (response) => {
+      if (response && response.status === 200) {
+        toast.success(`Login Success redirecting`);
+      }
+      queryClient.invalidateQueries(["user"]);
+    },
+  });
+};
+
+const registerAsync = ({ name, email, password }) => {
+  return authFetch.post("/auth/createUser", {
+    name,
+    email,
+    password,
+  });
+};
+export const useRegisterUser = ({ setLoading, setValues, values }) => {
+  return useMutation({
+    mutationFn: registerAsync,
+    onError: (e) => {
+      if (e.response && e.response.status === 401) {
+        toast.error("UnAuthenticated User Should Logout");
+        //TODO: LOGOUT
+      } else if (e.response) {
+        toast.error(e.response.data.msg);
+      } else {
+        toast.error("An error occurred");
+      }
+      setLoading(false);
+    },
+    onSuccess: (response) => {
+      if (response && response.status === 201) {
+        toast.success("Register Success");
+        setTimeout(() => {
+          setValues({ name: "", email: "", password: "", isMember: true });
+        }, 2000);
+      }
+      setLoading(false);
+    },
+  });
+};
+
+export const logoutUserAsync = () => {
+  return authFetch("/auth/logout");
+};
+export const useLogoutUser = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: logoutUserAsync,
+    onError: (e) => {
+      toast.error(e.response.data.msg);
+    },
+    onSuccess: () => {
+      navigate("/login");
+      queryClient.clear();
+      queryClient.removeQueries("user");
+    },
+  });
+};

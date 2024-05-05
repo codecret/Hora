@@ -1,8 +1,9 @@
 import "./Login.css";
 import FormRow from "../../components/FormRow";
 import { useState } from "react";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { useGetAuth, useLoginAuth, useRegisterUser } from "../../hooks/useAuth";
 
 const initialState = {
   name: "",
@@ -11,26 +12,48 @@ const initialState = {
   isMember: false,
 };
 const Login = () => {
+  const [isLoading, setLoading] = useState(false);
   const [values, setValues] = useState(initialState);
+  const { mutateAsync: loginUser } = useLoginAuth({ setLoading });
+  const { mutateAsync: registerUser } = useRegisterUser({
+    setLoading,
+    setValues,
+  });
+  useGetAuth({ state: "login" });
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
   const toggleMember = () => {
-    setValues({ ...values, isMember: !values.isMember });
+    setValues({ ...values, isMember: !values.isMember, values });
   };
 
   const onSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
-    const { name, email, phoneNumber, username, password } = values;
-    if (!name || !email || !phoneNumber || !username || !password) {
-      toast.error("Invalid Values", "danger");
-      return;
+    const { name, email, password, isMember } = values;
+
+    if (isMember) {
+      if (!email || !password) {
+        toast.error("Invalid Values", "danger");
+        setLoading(false);
+        return;
+      }
+      await loginUser({ name, email, password, isMember });
+    } else {
+      if (!name || !email || !password) {
+        toast.error("Invalid Values", "danger");
+        setLoading(false);
+        return;
+      }
+      await registerUser({ name, email, password, isMember });
     }
-    const currentUser = { name, email, phoneNumber, username, password };
-    // await registerAdmin({ currentUser });
+    setLoading(false);
   };
   return (
     <div className="container-full-width-height">
+      <div>
+        <Toaster position="bottom-right" reverseOrder={false} />
+      </div>
       <div className="login-container">
         <div className="left-container">
           {values.isMember && (
@@ -48,7 +71,7 @@ const Login = () => {
               handleChange={handleChange}
               isLabelThere={true}
               label={"Name"}
-              className={"login-input"}
+              className={"form-input login-input"}
               divClassName={"inputDiv"}
             />
           )}
@@ -60,7 +83,7 @@ const Login = () => {
             handleChange={handleChange}
             isLabelThere={true}
             label={"Email"}
-            className={"login-input"}
+            className={"form-input login-input"}
             divClassName={"inputDiv"}
           />
           <FormRow
@@ -71,22 +94,22 @@ const Login = () => {
             handleChange={handleChange}
             isLabelThere={true}
             label={"Password"}
-            className={"login-input"}
+            className={"form-input login-input"}
             divClassName={"inputDiv"}
           />
           <button
-            className="btn loginBtn"
-            // disabled={isLoading}
+            className="reset-btn loginBtn"
+            disabled={isLoading}
             onClick={onSubmit}
           >
-            Sign In
+            {values.isMember ? "Login" : "Register"}
           </button>
           <p className="notmember">
             {values.isMember ? "Not a member yet?" : "Already a member?"}
             <button
               type="button"
               onClick={toggleMember}
-              className="btn member-btn"
+              className="reset-btn member-btn"
             >
               {values.isMember ? "Register" : "Login"}
             </button>
