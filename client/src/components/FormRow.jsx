@@ -24,7 +24,7 @@ export const FormRow = ({
           value={value}
           name={name}
           onChange={handleChange}
-          className={`form-input inputLogin ${className}`}
+          className={`inputLogin ${className}`}
           placeholder={labelText}
         />
       }

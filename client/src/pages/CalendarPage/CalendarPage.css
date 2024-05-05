@@ -1,3 +1,7 @@
 .calendarContainer {
-  padding: 2rem;
+  padding: 1rem;
+}
+.custom-btn {
+  height: fit-content;
+  padding: 0.5rem 2rem !important;
 }
