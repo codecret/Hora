@@ -1,55 +1,78 @@
 .sidebar {
-    width: 100px;
-    height: 95vh;
-    background-color: #161A1D;
-    padding: 20px;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  width: 100px;
+  height: 95vh;
+  background-color: #161a1d;
+  padding: 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .sidebar h1 {
-    font-size: 20px;
-    color: #D3E763;
-    text-align: center;
-    cursor: pointer;
-    font-family: 'poppins-regular', sans-serif;
+  font-size: 20px;
+  color: #d3e763;
+  text-align: center;
+  cursor: pointer;
+  font-family: "poppins-regular", sans-serif;
 }
 
 .sidebar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .sidebar li {
-    margin-bottom: 50px;
-    cursor: pointer;
+  margin-bottom: 50px;
+  cursor: pointer;
 }
 
 .sidebar a {
-    color: #ffffff;
-    font-size: 18px;
-    padding: 10px;
-    border-radius: 12px;
-    -webkit-border-radius: 12px;
-    -moz-border-radius: 12px;
-    -ms-border-radius: 12px;
-    -o-border-radius: 12px;
-    display: flex;
+  color: #ffffff;
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 12px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  -ms-border-radius: 12px;
+  -o-border-radius: 12px;
+  display: flex;
 }
 
 .logout-icon {
-    cursor: pointer;
-    justify-content: center;
-    display: flex;
+  cursor: pointer;
+  justify-content: center;
+  display: flex;
 }
 
 .sidebar a:hover {
-    background-color: #589DFB;
-    color: #ffffff;
+  background-color: #589dfb;
+  color: #ffffff;
+}
+@media (max-width: 768px) {
+  .sidebar-left-column {
+    position: fixed;
+    bottom: 0;
+    z-index: 99;
+    width: 90%;
+    background-color: #161a1d;
+    border-radius: 20px;
+    margin-top: 0rem;
+  }
+  .sidebar {
+    flex-direction: row;
+    height: fit-content;
+    padding: 0rem;
+    justify-content: center;
+    width: 100%;
+    margin: 0px 20px;
+    align-items: center;
+  }
+  .sidebarBody {
+    display: flex;
+  }
 }

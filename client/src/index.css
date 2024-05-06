@@ -122,6 +122,9 @@ body {
   justify-content: space-between;
   margin-bottom: 1rem;
 }
+p {
+  margin: 0rem !important;
+}
 .custom-btn {
   background-color: #589dfb;
   /* width: fit-content; */
@@ -163,10 +166,11 @@ body {
   transform: translate(-50%, -50%);
   background-color: white;
   width: 40%;
-  height: 70%;
+  height: 90%;
   padding: 1rem 2rem;
   transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
   border-radius: 10px;
+  overflow: auto;
 }
 .closeIcon {
   cursor: pointer;
@@ -195,4 +199,16 @@ body {
   border-radius: 5px;
   border: 1px solid var(--grey-300) !important;
   margin-left: 0.5rem;
+}
+.animatedBtn:hover {
+  animation: scaleUp 1s ease-in-out;
+  transform: scale(1.03);
+}
+@keyframes scaleUp {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.03);
+  }
 }
