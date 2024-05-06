@@ -4,24 +4,38 @@ import { BadRequestError } from "../errors/index.js";
 import moment from "moment";
 
 const createAppointment = async (req, res) => {
-  const { title, description, participant, status } = req.body;
-
-  if (!title) {
+  let {
+    appointmentName,
+    appointmentDescription,
+    appointmentParticipates,
+    status,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+  } = req.body;
+  if (!appointmentName) {
     throw new BadRequestError("please provide all the values");
   }
-  if (req.body.date) {
-    req.body.date = new Date(req.body.date);
+
+  if (startDate) {
+    startDate = new Date(startDate);
+  }
+  if (endDate) {
+    endDate = new Date(endDate);
   }
 
   const appointment = await Appointment.create({
-    title,
-    date: req.body.date,
-    description,
-    participant,
+    title: appointmentName,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    description: appointmentDescription,
+    participants: appointmentParticipates,
     status,
     userId: req.user.userId,
   });
-
   res.status(StatusCodes.CREATED).json({
     appointment,
   });
@@ -30,7 +44,14 @@ const createAppointment = async (req, res) => {
 const updateAppointment = async (req, res) => {
   const { id: appointmentId } = req.params;
 
-  const { title, date, description, participant, status } = req.body;
+  const {
+    title,
+    startDate,
+    endDate,
+    description,
+    appointmentParticipates,
+    status,
+  } = req.body;
   if (!title) {
     throw new BadRequestError("please provide all the values");
   }
@@ -39,7 +60,7 @@ const updateAppointment = async (req, res) => {
   appointment.title = title;
   appointment.date = date;
   appointment.description = description;
-  appointment.participant = participant;
+  appointment.participants = appointmentParticipates;
   appointment.status = status;
 
   await appointment.save();

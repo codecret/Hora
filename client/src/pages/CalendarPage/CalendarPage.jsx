@@ -1,4 +1,3 @@
-import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import "./CalendarPage.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -8,35 +7,62 @@ import { Calendar } from "@fullcalendar/core";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import AddAppointmentWindow from "../../components/modals/AddAppointmentWindow";
+import { useGetAppointments } from "../../hooks/useAppointments";
+import Loader from "../../components/Loader";
+import listPlugin from "@fullcalendar/list";
+import timeGridPlugin from "@fullcalendar/timegrid";
 
 const CalendarPage = () => {
   const calendarRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data, isLoading, isFetching, isError } = useGetAppointments();
+  const [filteredDate, setFilteredDate] = useState([]);
+  useEffect(() => {
+    if (data) {
+      let events = data.map((e) => ({
+        title: e.title,
+        start: e.startDate,
+        end: e.endDate,
+        background: "red",
+      }));
+      setFilteredDate(events);
+    } else {
+      setFilteredDate([]);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (calendarRef.current) {
+      const eventColors = [
+        "#315ebf",
+        "#2c8ea0",
+        "#d#861cbf",
+        "#de53b5",
+        "#5a73d0",
+      ];
+
       const calendar = new Calendar(calendarRef.current, {
-        plugins: [dayGridPlugin, bootstrap5Plugin],
+        plugins: [dayGridPlugin, timeGridPlugin, listPlugin, bootstrap5Plugin],
         themeSystem: "bootstrap5",
-        height: "550px",
+        height: "calc(100vh - 200px)",
+
+        events: filteredDate,
+        headerToolbar: {
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
+        },
+        navLinks: true,
+        dayMaxEvents: true,
       });
       calendar.render();
     }
-  }, []);
-  const events = [
-    { title: "Meeting", start: new Date() },
-    { title: "Meeting", start: new Date() },
-    { title: "Meeting", start: new Date() },
-  ];
+  }, [filteredDate, isFetching]);
 
-  function renderEventContent(eventInfo) {
-    return (
-      <>
-        <b>{eventInfo.timeText}</b>
-        <i>{eventInfo.event.title}</i>
-      </>
-    );
+  if (isLoading || isFetching) {
+    return <Loader />;
   }
+
   return (
     <div className="calendarContainer">
       {createPortal(

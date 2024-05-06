@@ -13,36 +13,48 @@ import dayjs from "dayjs";
 import CreatableSelect from "react-select/creatable";
 import makeAnimated from "react-select/animated";
 import toast from "react-hot-toast";
+import {
+  useAddAppointment,
+  useEditAppointment,
+} from "../../hooks/useAppointments";
 
 const animatedComponents = makeAnimated();
 
 const AddAppointmentWindow = ({ isModalOpen, setIsModalOpen, editedId }) => {
   const { appointmentStatusOptions } = useAppContext();
   const [inputValue, setInputValue] = useState("");
-
+  const [appointmentStates, setAppointmentStates] = useState({
+    appointmentName: "",
+    appointmentDescription: "",
+    status: "Scheduled",
+    appointmentParticipates: [],
+    startDate: dayjs(),
+    endDate: dayjs(),
+    startTime: dayjs(),
+    endTime: dayjs(),
+  });
+  const { mutateAsync: createAppointment } = useAddAppointment({
+    setAppointmentStates,
+    setIsModalOpen,
+  });
+  const { mutateAsync: editAppointment } = useEditAppointment({
+    setAppointmentStates,
+    setIsModalOpen,
+  });
   const StyledDatePicker = styled(DatePicker)({
     margin: "10px 10px 10px 0px",
   });
   const StyledTimePicker = styled(TimePicker)({
     margin: "10px 10px 10px 0px",
   });
-  const [appointmentStates, setAppointmentStates] = useState({
-    appointmentName: "",
-    appointmentDescription: "",
-    status: "active",
-    appointmentSelectedMembers: [],
-    startDate: dayjs(),
-    endDate: dayjs(),
-    startTime: dayjs(),
-    endTime: dayjs(),
-  });
 
-  const handleCreateProject = () => {
+  const handleCreateProject = (e) => {
+    e.preventDefault();
     const {
       appointmentName,
       appointmentDescription,
       status,
-      appointmentSelectedMembers,
+      appointmentParticipates,
       startDate,
       endDate,
       startTime,
@@ -52,6 +64,7 @@ const AddAppointmentWindow = ({ isModalOpen, setIsModalOpen, editedId }) => {
       toast.error("fill required fields.");
       return;
     }
+    createAppointment({ ...appointmentStates });
   };
 
   const handleChangeInputs = (e) => {
@@ -66,14 +79,14 @@ const AddAppointmentWindow = ({ isModalOpen, setIsModalOpen, editedId }) => {
     let newMember;
     if (!inputValue) return;
     if (
-      appointmentStates.appointmentSelectedMembers.some(
+      appointmentStates.appointmentParticipates.some(
         (member) => member.value === inputValue
       )
     ) {
       toast.error("Duplicated.");
       return;
     }
-    if (appointmentStates.appointmentSelectedMembers.length > 9) {
+    if (appointmentStates.appointmentParticipates.length > 9) {
       toast.error("Participates cannot be more than 9.");
       return;
     }
@@ -86,8 +99,8 @@ const AddAppointmentWindow = ({ isModalOpen, setIsModalOpen, editedId }) => {
         };
         setAppointmentStates((prevState) => ({
           ...prevState,
-          appointmentSelectedMembers: [
-            ...prevState.appointmentSelectedMembers,
+          appointmentParticipates: [
+            ...prevState.appointmentParticipates,
             newMember,
           ],
         }));
@@ -113,7 +126,7 @@ const AddAppointmentWindow = ({ isModalOpen, setIsModalOpen, editedId }) => {
               appointmentName: "",
               appointmentDescription: "",
               status: "active",
-              appointmentSelectedMembers: [],
+              appointmentParticipates: [],
             });
             setIsModalOpen(false);
           }}
@@ -156,12 +169,12 @@ const AddAppointmentWindow = ({ isModalOpen, setIsModalOpen, editedId }) => {
           />
           <StyledTimePicker
             label="Start time"
-            alue={appointmentStates.startTime}
+            value={appointmentStates.startTime}
             onChange={(newValue) => handleDate("startTime", newValue)}
           />
           <StyledTimePicker
             label="Due time"
-            alue={appointmentStates.endTime}
+            value={appointmentStates.endTime}
             onChange={(newValue) => handleDate("endTime", newValue)}
           />
         </LocalizationProvider>
@@ -174,13 +187,13 @@ const AddAppointmentWindow = ({ isModalOpen, setIsModalOpen, editedId }) => {
           onChange={(deletedValue) =>
             setAppointmentStates((prevState) => ({
               ...prevState,
-              appointmentSelectedMembers: deletedValue,
+              appointmentParticipates: deletedValue,
             }))
           }
           onInputChange={(newValue) => setInputValue(newValue)}
           onKeyDown={handleKeyDown}
           placeholder="Type something and press enter..."
-          value={appointmentStates.appointmentSelectedMembers}
+          value={appointmentStates.appointmentParticipates}
         />
         <FormRow
           type={"text"}
@@ -188,13 +201,16 @@ const AddAppointmentWindow = ({ isModalOpen, setIsModalOpen, editedId }) => {
           name={"appointmentDescription"}
           value={appointmentStates.appointmentDescription}
           handleChange={handleChangeInputs}
-          divClassName={"w-100 projectDiv"}
+          divClassName={"w-100 modalDiv"}
           className={"w-100 modalInput"}
           label={"Description:"}
           isLabelThere={true}
           labelText={"Lorem ipsum dolor sit amet, consectetur "}
         />
-        <button className="btn createBtn" onClick={handleCreateProject}>
+        <button
+          className="reset-btn createBtn animatedBtn"
+          onClick={handleCreateProject}
+        >
           {editedId ? "Edit Appointment" : "Create Appointment"}
         </button>
       </div>

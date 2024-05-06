@@ -2,7 +2,7 @@ import React, { useContext, useReducer } from "react";
 import reducer from "./reducer";
 
 const initialState = {
-  appointmentStatusOptions: ["active", "archieved"],
+  appointmentStatusOptions: ["Scheduled", "Canceled", "Completed"],
 };
 
 const AppContext = React.createContext();

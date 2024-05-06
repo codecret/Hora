@@ -1,14 +1,10 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { useGetAuth } from "../hooks/useAuth";
-import BeatLoader from "react-spinners/BeatLoader";
 import NavBar from "../components/NavBar";
 import { Toaster } from "react-hot-toast";
+import Loader from "../components/Loader";
 
-const override = {
-  display: "block",
-  margin: "auto",
-};
 const Layout = () => {
   const {
     data: user,
@@ -16,15 +12,7 @@ const Layout = () => {
     isFetching,
   } = useGetAuth({ state: "protected" });
   if (isLoading || isFetching) {
-    return (
-      <BeatLoader
-        color="var(--primary-color)"
-        cssOverride={override}
-        size={30}
-        aria-label="Loading Spinner"
-        data-testid="loader"
-      />
-    );
+    return <Loader />;
   }
   return (
     <main className="dashboard-container">

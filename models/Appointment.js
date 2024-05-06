@@ -7,17 +7,25 @@ const AppointmentSchema = new mongoose.Schema(
       required: [true, "Please Choose A Title"],
       minlength: 3,
       maxlength: 30,
-      unique: true,
     },
-    date: {
+    startDate: {
       type: Date,
+    },
+    endDate: {
+      type: Date,
+    },
+    startTime: {
+      type: String,
+    },
+    endTime: {
+      type: String,
     },
     description: {
       type: String,
-      required: [true, "Please Choose A Usernane"],
+      required: [true, "Please Choose A description"],
     },
-    participant: {
-      type: String,
+    participants: {
+      type: [String], // Array of strings
     },
     status: {
       type: String,
