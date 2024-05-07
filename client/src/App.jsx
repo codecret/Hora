@@ -3,9 +3,9 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import CalendarPage from "./pages/CalendarPage/CalendarPage";
 import Layout from "./pages/Layout";
-import Login from "./pages/login/Login";
-import ForgotPassword from "./pages/login/ForgotPassword";
-import ResetPassword from "./pages/login/ResetPassword";
+import Login from "./pages/loginlayout/Login";
+import ForgotPassword from "./pages/loginlayout/ForgotPassword";
+import ResetPassword from "./pages/loginlayout/ResetPassword";
 import Error from "./pages/Error";
 import ProtectedRoute from "./components/ProtectedRoute";
 
