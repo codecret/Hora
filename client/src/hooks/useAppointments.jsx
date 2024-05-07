@@ -71,7 +71,7 @@ export const useAddAppointment = ({ setAppointmentStates, setIsModalOpen }) => {
         appointmentName: "",
         appointmentDescription: "",
         status: "active",
-        appointmentSelectedMembers: [],
+        appointmentParticipates: [],
         startDate: dayjs(),
         endDate: dayjs(),
         startTime: dayjs(),
@@ -86,20 +86,24 @@ const editAppointmentAsync = ({
   appointmentName,
   appointmentDescription,
   status,
-  appointmentSelectedMembers,
+  appointmentParticipates,
+  startDate,
+  endDate,
+  startTime,
+  endTime,
   editedId,
 }) => {
-  const users = appointmentSelectedMembers.map((ele) => ele.value);
+  const participants = appointmentParticipates.map((ele) => ele.value);
 
   return authFetch.patch(`/appointment/${editedId}`, {
-    name: appointmentName,
-    description: appointmentDescription,
+    appointmentName,
+    appointmentDescription,
     status,
-    users,
-    // startDate,
-    // endDate,
-    // startTime,
-    // endTime,
+    participants,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
   });
 };
 export const useEditAppointment = ({
@@ -126,7 +130,7 @@ export const useEditAppointment = ({
         appointmentName: "",
         appointmentDescription: "",
         status: "Scheduled",
-        appointmentSelectedMembers: [],
+        appointmentParticipates: [],
         startDate: dayjs(),
         endDate: dayjs(),
         startTime: dayjs(),

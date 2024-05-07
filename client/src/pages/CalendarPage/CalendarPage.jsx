@@ -15,15 +15,21 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 const CalendarPage = () => {
   const calendarRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editedId, setEditedId] = useState("");
   const { data, isLoading, isFetching, isError } = useGetAppointments();
   const [filteredDate, setFilteredDate] = useState([]);
   useEffect(() => {
     if (data?.appointments) {
       let events = data?.appointments?.map((e) => ({
+        id: e._id,
         title: e.title,
         start: e.startDate,
         end: e.endDate,
-        background: "red",
+        status: e.status,
+        participants: e.participants,
+        endTime: e.endTime,
+        startTime: e.startTime,
+        description: e.description,
       }));
       setFilteredDate(events);
     } else {
@@ -45,7 +51,10 @@ const CalendarPage = () => {
         plugins: [dayGridPlugin, timeGridPlugin, listPlugin, bootstrap5Plugin],
         themeSystem: "bootstrap5",
         height: "calc(100vh - 200px)",
-
+        eventClick: function (info) {
+          setEditedId(info.event.id);
+          setIsModalOpen(true);
+        },
         events: filteredDate,
         headerToolbar: {
           left: "prev,next today",
@@ -69,6 +78,8 @@ const CalendarPage = () => {
         <AddAppointmentWindow
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
+          editedId={editedId}
+          dates={filteredDate}
         />,
         document.body
       )}
@@ -76,7 +87,10 @@ const CalendarPage = () => {
         <p>Make Appointment</p>
         <button
           className="reset-btn custom-btn"
-          onClick={() => setIsModalOpen(!isModalOpen)}
+          onClick={() => {
+            setEditedId("");
+            setIsModalOpen(!isModalOpen);
+          }}
         >
           Add
         </button>

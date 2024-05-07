@@ -1,5 +1,5 @@
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { handleOverlayClick } from "../../utils/hooks";
 import FormRow from "../FormRow";
 import FormRowSelect from "../FormRowSelect";
@@ -20,7 +20,12 @@ import {
 
 const animatedComponents = makeAnimated();
 
-const AddAppointmentWindow = ({ isModalOpen, setIsModalOpen, editedId }) => {
+const AddAppointmentWindow = ({
+  isModalOpen,
+  setIsModalOpen,
+  editedId,
+  dates,
+}) => {
   const { appointmentStatusOptions } = useAppContext();
   const [inputValue, setInputValue] = useState("");
   const [appointmentStates, setAppointmentStates] = useState({
@@ -47,6 +52,25 @@ const AddAppointmentWindow = ({ isModalOpen, setIsModalOpen, editedId }) => {
   const StyledTimePicker = styled(TimePicker)({
     margin: "10px 10px 10px 0px",
   });
+  useEffect(() => {
+    const selectedAppointment = dates.find((ele) => ele.id == editedId);
+    if (editedId && selectedAppointment && isModalOpen === true) {
+      const participants = selectedAppointment?.participants?.map((e) => ({
+        value: e,
+        label: e,
+      }));
+      setAppointmentStates({
+        appointmentName: selectedAppointment.title,
+        appointmentDescription: selectedAppointment.description,
+        status: selectedAppointment.status ?? "",
+        appointmentParticipates: participants ?? [],
+        startDate: dayjs(selectedAppointment.start) ?? [],
+        endDate: dayjs(selectedAppointment.end) ?? [],
+        startTime: dayjs(selectedAppointment.startTime) ?? [],
+        endTime: dayjs(selectedAppointment.endTime) ?? [],
+      });
+    }
+  }, [editedId, isModalOpen]);
 
   const handleCreateProject = (e) => {
     e.preventDefault();
@@ -62,6 +86,10 @@ const AddAppointmentWindow = ({ isModalOpen, setIsModalOpen, editedId }) => {
     } = appointmentStates;
     if (!appointmentName || !status) {
       toast.error("fill required fields.");
+      return;
+    }
+    if (editedId) {
+      editAppointment({ editedId, ...appointmentStates });
       return;
     }
     createAppointment({ ...appointmentStates });
@@ -125,8 +153,12 @@ const AddAppointmentWindow = ({ isModalOpen, setIsModalOpen, editedId }) => {
             setAppointmentStates({
               appointmentName: "",
               appointmentDescription: "",
-              status: "active",
+              status: "Scheduled",
               appointmentParticipates: [],
+              startDate: dayjs(),
+              endDate: dayjs(),
+              startTime: dayjs(),
+              endTime: dayjs(),
             });
             setIsModalOpen(false);
           }}

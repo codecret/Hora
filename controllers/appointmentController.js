@@ -45,24 +45,29 @@ const createAppointment = async (req, res) => {
 const updateAppointment = async (req, res) => {
   const { id: appointmentId } = req.params;
 
-  const {
-    title,
+  let {
+    appointmentName,
+    appointmentDescription,
+    participants,
+    status,
     startDate,
     endDate,
-    description,
-    appointmentParticipates,
-    status,
+    startTime,
+    endTime,
   } = req.body;
-  if (!title) {
+  if (!appointmentName) {
     throw new BadRequestError("please provide all the values");
   }
   const appointment = await Appointment.findOne({ _id: appointmentId });
 
-  appointment.title = title;
-  appointment.date = date;
-  appointment.description = description;
-  appointment.participants = appointmentParticipates;
+  appointment.title = appointmentName;
+  appointment.description = appointmentDescription;
+  appointment.participants = participants;
   appointment.status = status;
+  appointment.startDate = startDate;
+  appointment.endDate = endDate;
+  appointment.startTime = startTime;
+  appointment.endTime = endTime;
 
   await appointment.save();
 
