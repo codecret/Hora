@@ -5,16 +5,16 @@ import dayjs from "dayjs";
 
 async function getAppointmentsAsync() {
   const { data } = await authFetch("/appointment");
-  const appointments = data.appointments;
-  return appointments;
+  return data;
 }
 
 export function useGetAppointments() {
-  return useQuery({
+  const query = useQuery({
     queryKey: ["appointments"],
     queryFn: () => getAppointmentsAsync(),
     keepPreviousData: true,
   });
+  return query;
 }
 
 const addAppointmentAsync = ({

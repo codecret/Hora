@@ -2,6 +2,7 @@ import Appointment from "../models/Appointment.js";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError } from "../errors/index.js";
 import moment from "moment";
+import mongoose from "mongoose";
 
 const createAppointment = async (req, res) => {
   let {
@@ -68,8 +69,72 @@ const updateAppointment = async (req, res) => {
   res.status(StatusCodes.OK).json({ appointment });
 };
 const allAppointments = async (req, res) => {
-  const appointments = await Appointment.find({});
-  res.status(StatusCodes.OK).json({ appointments });
+  const appointments = await Appointment.find({ userId: req.user.userId });
+  const statusMap = appointments.reduce((r, { status }) => {
+    if (!r[status]) r[status] = 1;
+    else r[status]++;
+    return r;
+  }, {});
+
+  const today = moment().startOf("day");
+  const nextWeek = moment(today).add(7, "days");
+
+  // Retrieve appointments for the next 7 days and filter by userId
+  const perfWeeklyApplications = await Appointment.aggregate([
+    {
+      $match: {
+        startDate: { $gte: today.toDate(), $lt: nextWeek.toDate() },
+        userId: mongoose.Types.ObjectId.createFromHexString(req.user.userId),
+      },
+    },
+    {
+      $group: {
+        _id: {
+          year: { $year: "$startDate" },
+          month: { $month: "$startDate" },
+          dayOfMonth: { $dayOfMonth: "$startDate" },
+          dayOfWeek: { $dayOfWeek: "$startDate" },
+          startDate: "$startDate",
+        },
+        value: { $sum: 1 },
+      },
+    },
+  ]);
+  const endDate = moment(today).add(7, "days"); // Get the end date (7 days from today)
+  const todaysday = moment(today).format("dddd");
+  const appointmentCountsByDay = []; // i will store day objects in this then do iteration
+
+  // Iterate through each date from today until 7 days after today
+  for (
+    let date = moment(today);
+    date.isSameOrBefore(endDate);
+    date.add(1, "day")
+  ) {
+    // Format the current date to get the day of the week
+    const dayOfWeek = date.format("dddd");
+
+    appointmentCountsByDay.push({
+      day: dayOfWeek,
+      count: 0,
+      fill: todaysday === dayOfWeek ? "white" : "#A5CBFF",
+    }); //create the object
+  }
+
+  perfWeeklyApplications.forEach((item) => {
+    // incerment the object
+    const dayOfWeek = moment(item._id.startDate).format("dddd");
+
+    // Find the corresponding object in appointmentCountsByDay array
+    const dayObj = appointmentCountsByDay.find((obj) => obj.day === dayOfWeek);
+
+    if (dayObj) {
+      dayObj.count += item.value;
+    }
+  });
+
+  res
+    .status(StatusCodes.OK)
+    .json({ appointments, statusMap, appointmentCountsByDay });
 };
 const userAppointments = async (req, res) => {
   const appointments = await Appointment.find({ userId: req.user.userId });
@@ -88,91 +153,10 @@ const deleteAppointment = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: `Success! Appointment removed` });
 };
 
-const getAppointmentsStats = async (req, res) => {
-  const appointment = await Appointment.find({ userId: req.user.userId });
-  if (!appointment) {
-    throw new NotFoundError(`Not Valid backlog`);
-  }
-  let AppointmentsStatus = await Appointment.find({});
-  AppointmentsStatus = AppointmentsStatus.reduce((r, { status }) => {
-    if (status) {
-      if (!r[status]) r[status] = 1;
-      else r[status]++;
-    }
-    return r;
-  }, {});
-  let perfWeeklyApplications = await Appointment.aggregate([
-    {
-      $group: {
-        _id: {
-          year: { $year: "$createdAt" },
-          month: { $month: "$createdAt" },
-          dayOfMonth: { $dayOfMonth: "$createdAt" },
-          dayOfWeek: { $dayOfWeek: "$createdAt" },
-        },
-        value: { $sum: 1 },
-      },
-    },
-    { $sort: { "_id.year": 1, "_id.month": 1, "_id.dayOfMonth": 1 } },
-  ]);
-  console.log(perfWeeklyApplications);
-  const today = moment().startOf("day");
-  const nextWeek = moment(today).add(7, "days").startOf("day");
-  perfWeeklyApplications = perfWeeklyApplications
-    .map((item) => {
-      const {
-        _id: { year, month, dayOfMonth },
-        value,
-      } = item;
-      const date = moment()
-        .year(year)
-        .month(month - 1)
-        .date(dayOfMonth)
-        .startOf("day");
-      return { date, value };
-    })
-    .filter(
-      (item) => item.date.isSameOrAfter(today) && item.date.isBefore(nextWeek)
-    );
-
-  const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-
-  const weekDays = [];
-  for (let i = 0; i < 7; i++) {
-    const day = moment(today).add(i, "days");
-    const dayOfWeek = days[day.day()];
-    const appointmentsOnDay = perfWeeklyApplications.find(
-      (item) => item.date.day() === day.day()
-    );
-    weekDays.push({
-      date: dayOfWeek,
-      value: appointmentsOnDay ? appointmentsOnDay.value : 0,
-    });
-  }
-
-  res.status(StatusCodes.OK).json({
-    AppointmentsStatus,
-    perfWeeklyApplications: weekDays,
-    countsOfAppointments: perfWeeklyApplications.reduce(
-      (acc, curr) => acc + curr.value,
-      0
-    ),
-  });
-};
-
 export {
   createAppointment,
   updateAppointment,
   deleteAppointment,
   allAppointments,
   userAppointments,
-  getAppointmentsStats,
 };

@@ -18,8 +18,8 @@ const CalendarPage = () => {
   const { data, isLoading, isFetching, isError } = useGetAppointments();
   const [filteredDate, setFilteredDate] = useState([]);
   useEffect(() => {
-    if (data) {
-      let events = data.map((e) => ({
+    if (data?.appointments) {
+      let events = data?.appointments?.map((e) => ({
         title: e.title,
         start: e.startDate,
         end: e.endDate,
@@ -29,7 +29,7 @@ const CalendarPage = () => {
     } else {
       setFilteredDate([]);
     }
-  }, [data]);
+  }, [data?.appointments]);
 
   useEffect(() => {
     if (calendarRef.current) {
