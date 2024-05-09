@@ -55,12 +55,6 @@ const AppointmentItem = ({
             : participants[0]}
         </p>
         <p className="appointment-description">{description}</p>
-        <Icon
-          className="arrow-icon"
-          icon="majesticons:arrow-right"
-          width="1.2em"
-          height="1.2em"
-        />
       </div>
     </div>
   );

@@ -2,8 +2,14 @@ import { NavLink } from "react-router-dom";
 import "./Sidebar.css";
 import { Icon } from "@iconify/react";
 import { links } from "../../../../utils/links";
+import { useLogoutUser } from "../../hooks/useAuth";
 
 const Sidebar = () => {
+  const { mutateAsync: logoutUser } = useLogoutUser();
+
+  const handleLogout = async () => {
+    await logoutUser();
+  };
   return (
     <div className="sidebar">
       <div>
@@ -28,9 +34,9 @@ const Sidebar = () => {
         })}
       </div>
       <div>
-        <a className="logout-icon" href="/">
+        <button className="logout-icon" onClick={handleLogout}>
           <Icon icon="majesticons:logout-line" width="1.2em" height="1.2em" />
-        </a>
+        </button>
       </div>
     </div>
   );

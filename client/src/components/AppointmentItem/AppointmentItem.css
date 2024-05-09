@@ -42,14 +42,6 @@
   position: relative;
 }
 
-.card-rightside .arrow-icon {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  margin: 10px;
-  color: #363636;
-}
-
 .appointment-title {
   font-size: 18px;
   font-family: "poppins-regular", sans-serif;

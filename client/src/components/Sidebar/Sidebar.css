@@ -1,6 +1,7 @@
 .sidebar {
   width: 100px;
   height: 95vh;
+  position: relative;
   background-color: #161a1d;
   padding: 20px;
   border-radius: 20px;
@@ -41,11 +42,17 @@
   -ms-border-radius: 12px;
   -o-border-radius: 12px;
   display: flex;
+  background-color: transparent;
 }
 
 .logout-icon {
   cursor: pointer;
   justify-content: center;
+  margin: auto;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: white;
   display: flex;
 }
 

@@ -49,7 +49,7 @@ const DashboardPage = () => {
         </div>
         <div className="bottom-row">
           <div className="container-bottom-row">
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="95%" height="80%">
               <BarChart
                 width={150}
                 height={40}
