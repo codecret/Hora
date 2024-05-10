@@ -10,12 +10,14 @@ import Error from "./pages/Error";
 import ProtectedRoute from "./components/ProtectedRoute";
 import EditProfile from "./pages/EditProfile/EditProfile";
 import Settings from "./pages/Settings/Settings";
+import Landing from "./pages/Landing/Landing";
 
 function App() {
   return (
     <Routes>
+      <Route index path="/" element={<Landing />} />
       <Route
-        path="/"
+        path="dashboard"
         element={
           <ProtectedRoute>
             <Layout />
@@ -25,7 +27,7 @@ function App() {
         <Route index element={<DashboardPage />} />
         <Route path="calendar" element={<CalendarPage />} />
         <Route path="settings" element={<Settings />} />
-        <Route path="/:id/profile-edit" element={<EditProfile />} />
+        <Route path=":id/profile-edit" element={<EditProfile />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />

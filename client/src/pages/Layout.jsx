@@ -6,11 +6,13 @@ import { Toaster } from "react-hot-toast";
 import Loader from "../components/Loader";
 
 const Layout = () => {
+  console.log("layout");
   const {
     data: user,
     isLoading,
     isFetching,
   } = useGetAuth({ state: "protected" });
+  console.log("user");
   if (isLoading || isFetching) {
     return <Loader />;
   }

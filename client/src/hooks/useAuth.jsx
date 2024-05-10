@@ -21,15 +21,18 @@ export function useGetAuth({ state }) {
     refetchOnReconnect: true,
     retry: false,
   });
+  console.log(state);
   useEffect(() => {
     if (query.error) {
-      navigate("/login");
+      if (state === "protected") {
+        navigate("/login");
+      }
       return;
     } else if (query.isSuccess) {
       if (state === "login") {
         setTimeout(() => {
-          navigate("/");
-        }, 1500);
+          navigate("/dashboard");
+        }, 1000);
       }
     }
   }, [query.isError, query.isSuccess, state]);

@@ -1,8 +1,8 @@
 import "./Login.css";
 import FormRow from "../../components/FormRow";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useGetAuth, useLoginAuth, useRegisterUser } from "../../hooks/useAuth";
 
 const initialState = {
@@ -26,6 +26,18 @@ const Login = () => {
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember, values });
   };
+  // Use useLocation hook to access location and state passed from Navbar
+  const location = useLocation();
+
+  // Access state passed from Navbar
+  const isMemberFromNavbar = location.state?.isMember || false;
+
+  useEffect(() => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      isMember: isMemberFromNavbar,
+    }));
+  }, [isMemberFromNavbar]);
 
   const onSubmit = async (e) => {
     setLoading(true);

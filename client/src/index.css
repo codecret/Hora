@@ -241,3 +241,11 @@ p {
 .inputDiv {
   margin: 0.5rem 0rem;
 }
+.horaLogoHeader {
+  /* font-family: var(--bodyFont); */
+  font-weight: 700;
+}
+.horaLogoImg {
+  width: 36px;
+  height: 36px;
+}

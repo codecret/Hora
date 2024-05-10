@@ -10,7 +10,6 @@ export const FormRow = ({
   label,
   required,
 }) => {
-  console.log(required);
   return (
     <div id="search-field" className={`${divClassName}`}>
       {isLabelThere && (
