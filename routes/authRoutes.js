@@ -21,7 +21,6 @@ const multer = Multer({
     fileSize: 25 * 1024 * 1024, // no larger than 5mb, you can change as needed.
   },
 });
-console.log(multer);
 router.route("/createUser").post(CreateUser);
 router.route("/login").post(login);
 router.route("/allUsers").get(withAuth, allUsers);

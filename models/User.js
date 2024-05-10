@@ -10,13 +10,18 @@ const UserSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      // unique: true,
+      required: [true, "Email should be unique."],
+      minlength: 3,
+      trim: true,
+      unique: true,
     },
-
     password: {
       type: String,
       // minlength:6,
       select: false,
+    },
+    phoneNumber: {
+      type: String,
     },
     photoUrl: {
       type: String,

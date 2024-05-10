@@ -22,7 +22,7 @@ const Layout = () => {
 
       <div className="dashboard-right-column">
         <NavBar user={user} />
-        <Outlet user={user} />
+        <Outlet context={user} />
         <div>
           <Toaster position="bottom-right" reverseOrder={false} />
         </div>

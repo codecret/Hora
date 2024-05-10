@@ -72,7 +72,7 @@ const registerAsync = ({ name, email, password }) => {
     password,
   });
 };
-export const useRegisterUser = ({ setLoading, setValues, values }) => {
+export const useRegisterUser = ({ setLoading, setValues }) => {
   return useMutation({
     mutationFn: registerAsync,
     onError: (e) => {
@@ -94,6 +94,41 @@ export const useRegisterUser = ({ setLoading, setValues, values }) => {
         }, 2000);
       }
       setLoading(false);
+    },
+  });
+};
+
+const editProfileAsync = ({ formData }) => {
+  return authFetch.post("/auth/editProfile", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+export const useEditProfile = () => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: editProfileAsync,
+    onError: (e) => {
+      if (e.response && e.response.status === 401) {
+        toast.error("UnAuthenticated User Should Logout");
+        //TODO: LOGOUT
+      } else if (e.response) {
+        toast.error(e.response.data.msg);
+      } else {
+        toast.error("An error occurred");
+      }
+    },
+    onSuccess: (response) => {
+      if (response && response.status === 200) {
+        toast.success("Profile Updated");
+      }
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+      queryClient.invalidateQueries(["user"]);
     },
   });
 };

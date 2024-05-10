@@ -17,10 +17,4 @@ export const links = [
     path: "/settings",
     icon: "majesticons:settings-cog-line",
   },
-  {
-    id: 4,
-    text: "Logout",
-    path: "/logout",
-    icon: "majesticons:logout-line",
-  },
 ];

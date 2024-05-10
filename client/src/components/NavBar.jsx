@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useLogoutUser } from "../hooks/useAuth";
 import Searchbar from "./Searchbar/Searchbar";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { IoPersonCircle } from "react-icons/io5";
 
 const NavBar = ({ user }) => {
@@ -26,8 +25,8 @@ const NavBar = ({ user }) => {
                 <img
                   src={user.photoUrl}
                   alt="profile"
-                  width={20}
-                  height={20}
+                  width={30}
+                  height={30}
                   className="profileImg"
                 />
               ) : (

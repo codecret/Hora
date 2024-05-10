@@ -9,11 +9,9 @@ const gcs = new Storage({
 });
 const bucketName = process.env.BUCKETNAME;
 export const bucket = gcs.bucket(bucketName);
-console.log(bucket);
 function getPublicUrl(filename) {
   return "https://storage.googleapis.com/" + bucketName + "/" + filename;
 }
-console.log(getPublicUrl);
 let ImgUpload = {};
 
 ImgUpload.uploadToGcs = (req, res, next) => {

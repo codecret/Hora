@@ -5,7 +5,6 @@ import attachCookie from "../utils/attachCookies.js";
 
 const CreateUser = async (req, res) => {
   const { password, name, email } = req.body;
-  console.log(name, email, password);
   if (!name || !password || !email) {
     throw new BadRequestError("please provide all the values");
   }
@@ -88,19 +87,19 @@ const getCurrentUser = async (req, res) => {
 };
 
 const editProfile = async (req, res) => {
-  console.log("entered");
-  console.log(req.file.cloudStoragePublicUrl);
   const { userId } = req.user;
-  const { password, name, email } = req.body;
+  const editProfileInputs = JSON.parse(req.body.editProfileInputs);
+  const { password, name, email, phoneNumber } = editProfileInputs;
   const photoUrl = req.file && req.file.cloudStoragePublicUrl;
-  console.log(photoUrl, password, name, email);
   let user = await User.findOne({ _id: userId });
+  console.log(user);
   if (!user) {
     throw new NotFoundError(`User with id ${userId} not found.`);
   }
   // Update user fields if provided
   if (name) user.name = name;
   if (email) user.email = email;
+  if (phoneNumber) user.phoneNumber = phoneNumber;
   if (password) user.password = password;
   if (photoUrl) user.photoUrl = photoUrl;
   user = await user.save();

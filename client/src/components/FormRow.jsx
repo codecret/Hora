@@ -10,22 +10,24 @@ export const FormRow = ({
   label,
   required,
 }) => {
+  console.log(required);
   return (
     <div id="search-field" className={`${divClassName}`}>
       {isLabelThere && (
-        <label htmlFor="name" className="labelStyle">
+        <label htmlFor={name} className="labelStyle">
           {label}
-          {required && <span className={`${required}`}>*</span>}
+          {required && <span className={`${required && "required"}`}>*</span>}
         </label>
       )}
       {
         <input
           type={type}
-          value={value}
+          value={value || ""}
           name={name}
           onChange={handleChange}
           className={`inputLogin ${className}`}
           placeholder={labelText}
+          autoComplete={type === "password" ? "on" : "off"}
         />
       }
     </div>
