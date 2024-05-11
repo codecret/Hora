@@ -15,10 +15,17 @@ import makeAnimated from "react-select/animated";
 import toast from "react-hot-toast";
 import {
   useAddAppointment,
+  useDeleteAppointment,
   useEditAppointment,
 } from "../../hooks/useAppointments";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 const animatedComponents = makeAnimated();
+dayjs.extend(customParseFormat);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const AddAppointmentWindow = ({
   isModalOpen,
@@ -26,6 +33,7 @@ const AddAppointmentWindow = ({
   editedId,
   dates,
 }) => {
+  // console.log("dates", dates);
   const { appointmentStatusOptions } = useAppContext();
   const [inputValue, setInputValue] = useState("");
   const [appointmentStates, setAppointmentStates] = useState({
@@ -46,12 +54,17 @@ const AddAppointmentWindow = ({
     setAppointmentStates,
     setIsModalOpen,
   });
+  const { mutateAsync: deleteAppointment } = useDeleteAppointment({
+    setAppointmentStates,
+    setIsModalOpen,
+  });
   const StyledDatePicker = styled(DatePicker)({
     margin: "10px 10px 10px 0px",
   });
   const StyledTimePicker = styled(TimePicker)({
     margin: "10px 10px 10px 0px",
   });
+  // console.log("appointmentStates", appointmentStates);
   useEffect(() => {
     const selectedAppointment = dates.find((ele) => ele.id == editedId);
     if (editedId && selectedAppointment && isModalOpen === true) {
@@ -59,31 +72,33 @@ const AddAppointmentWindow = ({
         value: e,
         label: e,
       }));
+
+      // Parse start and end dates
+      const startDate = dayjs(selectedAppointment.start).tz(
+        "Europe/Istanbul",
+        true
+      );
+      const endDate = dayjs(selectedAppointment.end).tz(
+        "Europe/Istanbul",
+        true
+      );
+
       setAppointmentStates({
         appointmentName: selectedAppointment.title,
         appointmentDescription: selectedAppointment.description,
         status: selectedAppointment.status ?? "",
         appointmentParticipates: participants ?? [],
-        startDate: dayjs(selectedAppointment.start) ?? [],
-        endDate: dayjs(selectedAppointment.end) ?? [],
-        startTime: dayjs(selectedAppointment.startTime) ?? [],
-        endTime: dayjs(selectedAppointment.endTime) ?? [],
+        startDate: startDate.isValid() ? startDate : dayjs(),
+        endDate: endDate.isValid() ? endDate : dayjs(),
+        startTime: startDate.isValid() ? startDate : dayjs(),
+        endTime: endDate.isValid() ? endDate : dayjs(),
       });
     }
   }, [editedId, isModalOpen]);
 
   const handleCreateProject = (e) => {
     e.preventDefault();
-    const {
-      appointmentName,
-      appointmentDescription,
-      status,
-      appointmentParticipates,
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-    } = appointmentStates;
+    const { appointmentName, status } = appointmentStates;
     if (!appointmentName || !status) {
       toast.error("fill required fields.");
       return;
@@ -102,7 +117,6 @@ const AddAppointmentWindow = ({
   const handleDate = (name, value) => {
     setAppointmentStates({ ...appointmentStates, [name]: value });
   };
-
   const handleKeyDown = (event) => {
     let newMember;
     if (!inputValue) return;
@@ -187,28 +201,37 @@ const AddAppointmentWindow = ({
           handleChange={handleChangeInputs}
           list={[...appointmentStatusOptions]}
         />
+
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <StyledDatePicker
-            label="Start Date"
-            value={appointmentStates.startDate}
-            // onChange={(newValue) => setValue(newValue)}
-            onChange={(newValue) => handleDate("startDate", newValue)}
-          />
-          <StyledDatePicker
-            label="End Date"
-            value={appointmentStates.endDate}
-            onChange={(newValue) => handleDate("endDate", newValue)}
-          />
-          <StyledTimePicker
-            label="Start time"
-            value={appointmentStates.startTime}
-            onChange={(newValue) => handleDate("startTime", newValue)}
-          />
-          <StyledTimePicker
-            label="Due time"
-            value={appointmentStates.endTime}
-            onChange={(newValue) => handleDate("endTime", newValue)}
-          />
+          <div className="modalDatePart">
+            <StyledDatePicker
+              label="Start Date"
+              value={appointmentStates.startDate}
+              // onChange={(newValue) => setValue(newValue)}
+              onChange={(newValue) => handleDate("startDate", newValue)}
+              format="DD-MM-YYYY"
+            />
+            <StyledDatePicker
+              label="End Date"
+              value={appointmentStates.endDate}
+              onChange={(newValue) => handleDate("endDate", newValue)}
+              format="DD-MM-YYYY"
+            />{" "}
+          </div>
+          <div className="modalDatePart">
+            <StyledTimePicker
+              label="Start time"
+              value={appointmentStates.startTime}
+              onChange={(newValue) => handleDate("startTime", newValue)}
+              format="hh:mm A"
+            />
+            <StyledTimePicker
+              label="Due time"
+              value={appointmentStates.endTime}
+              onChange={(newValue) => handleDate("endTime", newValue)}
+              format="hh:mm A"
+            />
+          </div>
         </LocalizationProvider>
         <CreatableSelect
           components={animatedComponents}
@@ -245,6 +268,16 @@ const AddAppointmentWindow = ({
         >
           {editedId ? "Edit Appointment" : "Create Appointment"}
         </button>
+        {editedId && (
+          <button
+            className="reset-btn createBtn animatedBtn deleteBtn"
+            onClick={() => {
+              deleteAppointment({ id: editedId });
+            }}
+          >
+            Delete Appointment
+          </button>
+        )}
       </div>
     </div>
   );

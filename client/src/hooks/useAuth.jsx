@@ -21,7 +21,7 @@ export function useGetAuth({ state }) {
     refetchOnReconnect: true,
     retry: false,
   });
-  console.log(state);
+  // console.log(state);
   useEffect(() => {
     if (query.error) {
       if (state === "protected") {

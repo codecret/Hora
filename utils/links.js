@@ -2,19 +2,19 @@ export const links = [
   {
     id: 1,
     text: "dashboard",
-    path: "/",
+    path: "/dashboard",
     icon: "majesticons:home-line",
   },
   {
     id: 2,
     text: "calendar",
-    path: "/calendar",
+    path: "/dashboard/calendar",
     icon: "majesticons:calendar-line",
   },
   {
     id: 3,
     text: "settings",
-    path: "/settings",
+    path: "/dashboard/settings",
     icon: "majesticons:settings-cog-line",
   },
 ];

@@ -249,3 +249,7 @@ p {
   width: 36px;
   height: 36px;
 }
+.deleteBtn {
+  background: #fb6c58 !important;
+  margin-left: 1rem;
+}

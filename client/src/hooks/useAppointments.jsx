@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authFetch } from "../utils/fetch";
 import toast from "react-hot-toast";
 import dayjs from "dayjs";
+import { convert24hoursToMinutesTime } from "../utils/hooks";
 
 async function getAppointmentsAsync() {
   const { data } = await authFetch("/appointment");
@@ -27,6 +28,10 @@ const addAppointmentAsync = ({
   startTime,
   endTime,
 }) => {
+  //convert it to minutes to store in database
+  let convertedStartTime = convert24hoursToMinutesTime(startTime);
+  let convertedEndTime = convert24hoursToMinutesTime(endTime);
+
   const appointment = appointmentParticipates?.map((ele) => ele.value);
   console.log(
     appointmentName,
@@ -35,8 +40,8 @@ const addAppointmentAsync = ({
     appointment,
     startDate,
     endDate,
-    startTime,
-    endTime
+    convertedStartTime,
+    convertedEndTime
   );
   return authFetch.post("/appointment", {
     appointmentName,
@@ -45,8 +50,8 @@ const addAppointmentAsync = ({
     appointmentParticipates: appointment,
     startDate,
     endDate,
-    startTime,
-    endTime,
+    startTime: convertedStartTime,
+    endTime: convertedEndTime,
   });
 };
 
@@ -93,6 +98,9 @@ const editAppointmentAsync = ({
   endTime,
   editedId,
 }) => {
+  //convert it to minutes to store in database
+  let convertedStartTime = convert24hoursToMinutesTime(startTime);
+  let convertedEndTime = convert24hoursToMinutesTime(endTime);
   const participants = appointmentParticipates.map((ele) => ele.value);
 
   return authFetch.patch(`/appointment/${editedId}`, {
@@ -102,8 +110,8 @@ const editAppointmentAsync = ({
     participants,
     startDate,
     endDate,
-    startTime,
-    endTime,
+    startTime: convertedStartTime,
+    endTime: convertedEndTime,
   });
 };
 export const useEditAppointment = ({

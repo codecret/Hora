@@ -17,3 +17,13 @@
   padding: none !important;
   margin: 0.5rem 0rem !important;
 }
+.modalDatePart {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+}
+@media (max-width: 768px) {
+  .addMemberWindow {
+    width: 90% !important;
+  }
+}
