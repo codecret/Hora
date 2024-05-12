@@ -101,7 +101,7 @@ body {
   /* cursor: pointer; */
 }
 .active {
-  background-color: var(--primary-color);
+  background-color: var(--primary-color) !important;
 }
 .nav-link {
   width: fit-content;

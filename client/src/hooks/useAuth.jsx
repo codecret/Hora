@@ -21,7 +21,6 @@ export function useGetAuth({ state }) {
     refetchOnReconnect: true,
     retry: false,
   });
-  // console.log(state);
   useEffect(() => {
     if (query.error) {
       if (state === "protected") {
@@ -129,7 +128,7 @@ export const useEditProfile = () => {
         toast.success("Profile Updated");
       }
       setTimeout(() => {
-        navigate("/");
+        navigate("/dashboard");
       }, 1000);
       queryClient.invalidateQueries(["user"]);
     },

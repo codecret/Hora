@@ -5,8 +5,6 @@ export const handleOverlayClick = (e, setIsModalOpen) => {
 };
 export const convertMinutesTo24hoursTime = (totalMinutes) => {
   // Convert minutes to 24 hours
-  console.log("totalMinutes", totalMinutes);
-
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
 

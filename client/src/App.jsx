@@ -8,33 +8,34 @@ import ForgotPassword from "./pages/loginlayout/ForgotPassword";
 import ResetPassword from "./pages/loginlayout/ResetPassword";
 import Error from "./pages/Error";
 import ProtectedRoute from "./components/ProtectedRoute";
-import EditProfile from "./pages/EditProfile/EditProfile";
 import Settings from "./pages/Settings/Settings";
 import Landing from "./pages/Landing/Landing";
+import ThemeProvider from "./theme/theme";
 
 function App() {
   return (
-    <Routes>
-      <Route index path="/" element={<Landing />} />
-      <Route
-        path="dashboard"
-        element={
-          <ProtectedRoute>
-            <Layout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<DashboardPage />} />
-        <Route path="calendar" element={<CalendarPage />} />
-        <Route path="settings" element={<Settings />} />
-        <Route path=":id/profile-edit" element={<EditProfile />} />
-      </Route>
-      <Route path="/login" element={<Login />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/error" element={<Error />} />
-      <Route path="*" element={<Error />} />
-    </Routes>
+    <ThemeProvider>
+      <Routes>
+        <Route index path="/" element={<Landing />} />
+        <Route
+          path="dashboard"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<DashboardPage />} />
+          <Route path="calendar" element={<CalendarPage />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/error" element={<Error />} />
+        <Route path="*" element={<Error />} />
+      </Routes>
+    </ThemeProvider>
   );
 }
 

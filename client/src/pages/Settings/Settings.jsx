@@ -25,6 +25,7 @@ const Settings = () => {
         email: user.email || "",
         phoneNumber: user.phoneNumber || "",
       });
+      setFile({ preview: user.photoUrl || null });
     }
   }, [user]);
   const handleRemove = (event) => {
@@ -78,7 +79,7 @@ const Settings = () => {
         className="profileForm"
       >
         <div className="topContainer">
-          {file ? (
+          {file?.preview ? (
             <img src={file.preview} alt="Preview" className="image" />
           ) : (
             <FaCircleUser
