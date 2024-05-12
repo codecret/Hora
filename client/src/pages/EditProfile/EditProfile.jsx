@@ -14,6 +14,7 @@ const EditProfile = () => {
     password: "",
     email: "",
   });
+  const [file, setFile] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     if (user) {
@@ -23,7 +24,6 @@ const EditProfile = () => {
       });
     }
   }, [id, user]);
-  const [file, setFile] = useState(null);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, email } = editProfileInputs;

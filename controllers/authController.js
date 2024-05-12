@@ -90,8 +90,13 @@ const editProfile = async (req, res) => {
   const { userId } = req.user;
   const editProfileInputs = JSON.parse(req.body.editProfileInputs);
   const { password, name, email, phoneNumber } = editProfileInputs;
-  const photoUrl = req.file && req.file.cloudStoragePublicUrl;
   let user = await User.findOne({ _id: userId });
+  let photoUrl = null;
+  console.log(req.file);
+  if (req.file) {
+    photoUrl = req.file.cloudStoragePublicUrl;
+  }
+
   console.log(user);
   if (!user) {
     throw new NotFoundError(`User with id ${userId} not found.`);
@@ -101,7 +106,7 @@ const editProfile = async (req, res) => {
   if (email) user.email = email;
   if (phoneNumber) user.phoneNumber = phoneNumber;
   if (password) user.password = password;
-  if (photoUrl) user.photoUrl = photoUrl;
+  user.photoUrl = photoUrl;
   user = await user.save();
 
   user.password = undefined;
