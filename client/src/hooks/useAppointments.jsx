@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authFetch } from "../utils/fetch";
 import toast from "react-hot-toast";
 import dayjs from "dayjs";
-import { convert24hoursToMinutesTime } from "../utils/hooks";
+import { convert24hoursToMinutesTime, useDebounce } from "../utils/hooks";
 
 async function getAppointmentsAsync() {
   const { data } = await authFetch("/appointment");
@@ -15,6 +15,32 @@ export function useGetAppointments() {
     queryFn: () => getAppointmentsAsync(),
     keepPreviousData: true,
   });
+  return query;
+}
+async function getAppointmentsSearchAsync({ search }) {
+  let url = "/appointment/search";
+  if (search && search !== "") {
+    url = url + `?appointmentSearch=${search}`;
+  }
+  const { data } = await authFetch(url);
+  return data;
+}
+
+export function useGetAppointmentsSearch({
+  search,
+  debounce = 1500,
+  inputRef,
+}) {
+  const debouncedSearchQuery = useDebounce(search, debounce);
+  if (inputRef.current) {
+    inputRef.current.focus();
+  }
+  const query = useQuery({
+    queryKey: ["appointments", debouncedSearchQuery ?? ""],
+    queryFn: () => getAppointmentsSearchAsync({ search: debouncedSearchQuery }),
+    keepPreviousData: true,
+  });
+
   return query;
 }
 

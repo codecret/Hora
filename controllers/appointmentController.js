@@ -141,6 +141,19 @@ const allAppointments = async (req, res) => {
     .status(StatusCodes.OK)
     .json({ appointments, statusMap, appointmentCountsByDay });
 };
+const allAppointmentsSearch = async (req, res) => {
+  const { appointmentSearch } = req.query;
+  console.log(appointmentSearch);
+  let queryObject = { userId: req.user.userId };
+  if (appointmentSearch) {
+    queryObject.title = { $regex: appointmentSearch, $options: "i" };
+  }
+  // if (appointmentSearchStatus !== "all" && appointmentSearchStatus) {
+  //   queryObject.status = appointmentSearchStatus;
+  // }
+  const appointments = await Appointment.find(queryObject);
+  res.status(StatusCodes.OK).json({ appointments });
+};
 const userAppointments = async (req, res) => {
   const appointments = await Appointment.find({ userId: req.user.userId });
   res.status(StatusCodes.OK).json({ appointments });
@@ -159,6 +172,7 @@ const deleteAppointment = async (req, res) => {
 };
 
 export {
+  allAppointmentsSearch,
   createAppointment,
   updateAppointment,
   deleteAppointment,

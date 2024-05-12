@@ -73,6 +73,9 @@
   filter: blur(50px);
 }
 .gradient-btn {
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
   margin: auto !important;
   margin-top: 2em !important;
   border-radius: 35px !important;

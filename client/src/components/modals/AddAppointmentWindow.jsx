@@ -7,8 +7,6 @@ import { IoClose } from "react-icons/io5";
 import { useAppContext } from "../../context/appContext";
 import "./modal.css";
 import { styled } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import CreatableSelect from "react-select/creatable";
 import makeAnimated from "react-select/animated";
@@ -202,37 +200,35 @@ const AddAppointmentWindow = ({
           list={[...appointmentStatusOptions]}
         />
 
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <div className="modalDatePart">
-            <StyledDatePicker
-              label="Start Date"
-              value={appointmentStates.startDate}
-              // onChange={(newValue) => setValue(newValue)}
-              onChange={(newValue) => handleDate("startDate", newValue)}
-              format="DD-MM-YYYY"
-            />
-            <StyledDatePicker
-              label="End Date"
-              value={appointmentStates.endDate}
-              onChange={(newValue) => handleDate("endDate", newValue)}
-              format="DD-MM-YYYY"
-            />{" "}
-          </div>
-          <div className="modalDatePart">
-            <StyledTimePicker
-              label="Start time"
-              value={appointmentStates.startTime}
-              onChange={(newValue) => handleDate("startTime", newValue)}
-              format="hh:mm A"
-            />
-            <StyledTimePicker
-              label="Due time"
-              value={appointmentStates.endTime}
-              onChange={(newValue) => handleDate("endTime", newValue)}
-              format="hh:mm A"
-            />
-          </div>
-        </LocalizationProvider>
+        <div className="modalDatePart">
+          <StyledDatePicker
+            label="Start Date"
+            value={appointmentStates.startDate}
+            // onChange={(newValue) => setValue(newValue)}
+            onChange={(newValue) => handleDate("startDate", newValue)}
+            format="DD-MM-YYYY"
+          />
+          <StyledDatePicker
+            label="End Date"
+            value={appointmentStates.endDate}
+            onChange={(newValue) => handleDate("endDate", newValue)}
+            format="DD-MM-YYYY"
+          />{" "}
+        </div>
+        <div className="modalDatePart">
+          <StyledTimePicker
+            label="Start time"
+            value={appointmentStates.startTime}
+            onChange={(newValue) => handleDate("startTime", newValue)}
+            format="hh:mm A"
+          />
+          <StyledTimePicker
+            label="Due time"
+            value={appointmentStates.endTime}
+            onChange={(newValue) => handleDate("endTime", newValue)}
+            format="hh:mm A"
+          />
+        </div>
         <CreatableSelect
           components={animatedComponents}
           inputValue={inputValue}

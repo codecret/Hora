@@ -1,6 +1,7 @@
 import "./AppointmentItem.css";
 import { Icon } from "@iconify/react";
 import dayjs from "dayjs";
+import { convertMinutesTo24hoursTime } from "../../utils/hooks";
 
 const AppointmentItem = ({
   title,
@@ -11,24 +12,10 @@ const AppointmentItem = ({
   description,
 }) => {
   const emptyStartDate = startDate || "";
-  const emptyStartTime = startTime || "";
-  const emptyEndTime = endTime || "";
-
-  const startTimeFormatted = new Date(`${emptyStartTime}`).toLocaleTimeString(
-    [],
-    {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    }
-  );
-
-  const endTimeFormatted = new Date(`${emptyEndTime}`).toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-
+  const emptyStartTime = startTime
+    ? convertMinutesTo24hoursTime(startTime)
+    : "";
+  const emptyEndTime = endTime ? convertMinutesTo24hoursTime(endTime) : "";
   const formattedStartDate = dayjs(emptyStartDate).format("dddd, MMM D");
 
   return (
@@ -42,15 +29,15 @@ const AppointmentItem = ({
         {startTime && (
           <div className="appointment-time">
             <Icon icon="majesticons:clock-line" width="1.2em" height="1.2em" />
-            <p>{`${startTime && startTimeFormatted} - ${
-              endTime && endTimeFormatted
+            <p>{`${startTime && emptyStartTime} - ${
+              endTime && emptyEndTime
             }`}</p>
           </div>
         )}
       </div>
       <div className="card-rightside">
         <p className="appointment-name">
-          {participants.length > 0
+          {participants.length > 1
             ? `${participants[0]} +${participants.length - 1} others.`
             : participants[0]}
         </p>

@@ -5,6 +5,7 @@
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   background-color: #eaeaea;
+  height: 100vh;
 }
 
 .sidebar-left-column {

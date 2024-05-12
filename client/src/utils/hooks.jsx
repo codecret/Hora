@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useState } from "react";
+
 export const handleOverlayClick = (e, setIsModalOpen) => {
   if (e.target.classList.contains("overlay")) {
     setIsModalOpen(false);
@@ -25,4 +28,19 @@ export const convert24hoursToMinutesTime = (timeIn24Hours) => {
   const minutes = timeIn24Hours.minute();
   const totalMinutes = hours * 60 + minutes;
   return totalMinutes;
+};
+
+export const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
 };
