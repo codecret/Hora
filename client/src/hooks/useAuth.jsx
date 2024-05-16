@@ -3,6 +3,7 @@ import { authFetch } from "../utils/fetch";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 async function getAuthAsync() {
   const response = await authFetch.get("/auth/getCurrentUser");
@@ -47,20 +48,21 @@ const useLoginAuthAsync = ({ email, password }) => {
 };
 
 export const useLoginAuth = ({ setLoading }) => {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: useLoginAuthAsync,
     onError: (e) => {
       if (e.response && e.response.status === 401) {
-        toast.error("Username or Password is wrong");
+        toast.error(t("Username or Password is wrong"));
       } else {
-        toast.error("An error occurred");
+        toast.error(t("An error occurred"));
       }
       setLoading(false);
     },
     onSuccess: (response) => {
       if (response && response.status === 200) {
-        toast.success(`Login Success redirecting`);
+        toast.success(t("Login Success redirecting"));
       }
       queryClient.invalidateQueries(["user"]);
     },
@@ -75,22 +77,23 @@ const registerAsync = ({ name, email, password }) => {
   });
 };
 export const useRegisterUser = ({ setLoading, setValues }) => {
+  const { t } = useTranslation();
   return useMutation({
     mutationFn: registerAsync,
     onError: (e) => {
       if (e.response && e.response.status === 401) {
-        toast.error("UnAuthenticated User Should Logout");
+        toast.error(t("UnAuthenticated User Should Logout"));
         //TODO: LOGOUT
       } else if (e.response) {
         toast.error(e.response.data.msg);
       } else {
-        toast.error("An error occurred");
+        toast.error(t("An error occurred"));
       }
       setLoading(false);
     },
     onSuccess: (response) => {
       if (response && response.status === 201) {
-        toast.success("Register Success");
+        toast.success(t("Register Success"));
         setTimeout(() => {
           setValues({ name: "", email: "", password: "", isMember: true });
         }, 2000);
@@ -110,22 +113,23 @@ const editProfileAsync = ({ formData }) => {
 export const useEditProfile = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: editProfileAsync,
     onError: (e) => {
       if (e.response && e.response.status === 401) {
-        toast.error("UnAuthenticated User Should Logout");
+        toast.error(t("UnAuthenticated User Should Logout"));
         //TODO: LOGOUT
       } else if (e.response) {
         toast.error(e.response.data.msg);
       } else {
-        toast.error("An error occurred");
+        toast.error(t("An error occurred"));
       }
     },
     onSuccess: (response) => {
       if (response && response.status === 200) {
-        toast.success("Profile Updated");
+        toast.success(t("Profile Updated"));
       }
       setTimeout(() => {
         navigate("/dashboard");

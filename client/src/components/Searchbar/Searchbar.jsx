@@ -1,8 +1,10 @@
 import { useState } from "react";
 import "./Searchbar.css";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Searchbar = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -21,7 +23,7 @@ const Searchbar = () => {
       <input
         className="searchbar-input"
         type="text"
-        placeholder="Search..."
+        placeholder={t("Search")}
         value={searchTerm}
         onChange={handleSearch}
         onKeyDown={handleKeyPress}

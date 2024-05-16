@@ -50,8 +50,11 @@
   flex-direction: column;
 }
 .secBtn {
+  display: flex;
+  align-items: center;
   padding-right: 3rem !important;
   padding-left: 3rem !important;
+  height: 40px;
   border: 1px solid rgba(0, 0, 0, 0.15) !important;
 }
 .customInput {
@@ -65,7 +68,9 @@
   bottom: 0px;
   right: 20px;
 }
-
+.passwordChange {
+  margin-top: 0.5rem;
+}
 @media (max-width: 768px) {
   .topContainer,
   .wholeContainer {

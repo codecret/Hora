@@ -5,8 +5,12 @@ import AppointmentItem from "../../components/AppointmentItem/AppointmentItem";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Loader from "../../components/Loader";
 import { useNavigate } from "react-router-dom";
+import { useGetAuth } from "../../hooks/useAuth";
+import { useTranslation } from "react-i18next";
 
 const SearchPage = () => {
+  const { t } = useTranslation();
+  const { isLoading, isFetching } = useGetAuth({ state: "protected" });
   const [search, setSearch] = useState("");
   const inputRef = useRef(null);
   const navigate = useNavigate();
@@ -22,6 +26,7 @@ const SearchPage = () => {
       setSearch(querySearchTerm);
     }
   }, [location]);
+  if (isLoading || isFetching) return <Loader />;
 
   const handleInputChange = (e) => {
     setSearch(e.target.value);
@@ -51,7 +56,7 @@ const SearchPage = () => {
               <AppointmentItem key={index} {...appointment} />
             ))
           ) : (
-            <h3>No Appointment Data..</h3>
+            <h3>{t("No Appointment Data")}..</h3>
           )}
         </div>
       </div>
