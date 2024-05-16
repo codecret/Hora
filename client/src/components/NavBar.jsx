@@ -2,14 +2,23 @@ import { useState } from "react";
 import { useLogoutUser } from "../hooks/useAuth";
 import Searchbar from "./Searchbar/Searchbar";
 import { IoPersonCircle } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
+import LanguageLayout from "./LanguageLayout";
 
 const NavBar = ({ user }) => {
   const [showLogout, setShowLogout] = useState(false);
+  const [showLanguage, setShowLanguage] = useState(false);
   const { mutateAsync: logoutUser } = useLogoutUser();
+  const { t } = useTranslation();
 
   return (
     <div className="searchbar-container">
       <Searchbar />
+      <LanguageLayout
+        showLanguage={showLanguage}
+        setShowLanguage={setShowLanguage}
+      />
+
       <div className="user-name-container">
         <div className="btn-container">
           <button
@@ -52,7 +61,7 @@ const NavBar = ({ user }) => {
                 await logoutUser();
               }}
             >
-              logout
+              {t("logout")}
             </button>
           </div>
         </div>

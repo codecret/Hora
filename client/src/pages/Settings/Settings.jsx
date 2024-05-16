@@ -6,8 +6,10 @@ import FormRow from "../../components/FormRow";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useEditProfile } from "../../hooks/useAuth";
+import { useTranslation } from "react-i18next";
 
 const Settings = () => {
+  const { t } = useTranslation();
   const user = useOutletContext();
   const [file, setFile] = useState(null);
   const [editProfileInputs, setEditProfileInputs] = useState({
@@ -94,7 +96,7 @@ const Settings = () => {
 
           <div className="btnContainer">
             <label className="mybtn secBtn" htmlFor="fileInput">
-              Change Picture
+              {t("Change Picture")}
               <input
                 id="fileInput"
                 type="file"
@@ -104,7 +106,7 @@ const Settings = () => {
               />
             </label>
             <Button
-              text={"Remove"}
+              text={t("Remove")}
               classNameCustom={"mybtn thirdBtn"}
               handleClick={handleRemove}
             />
@@ -114,7 +116,7 @@ const Settings = () => {
         <div className="bodyContainer">
           <div className="wholeContainer">
             <div className="leftContainer">
-              <p className="s-bodyHeader">User Information</p>
+              <p className="s-bodyHeader">{t("User Information")}</p>
               <FormRow
                 type={"text"}
                 name={"name"}
@@ -148,41 +150,42 @@ const Settings = () => {
                 value={editProfileInputs.phoneNumber}
                 labelText={"Phone Number"}
                 isLabelThere={true}
-                label={"Phone number"}
+                label={"Phone Number"}
               />
             </div>
 
             <div className="rightContainer">
-              <p className="changepasswordtext">Change Your Password</p>
-              <FormRow
-                type={"password"}
-                name={"password"}
-                divClassName={"inputDiv"}
-                className={"fullWidth customInput"}
-                handleChange={handleChange}
-                value={editProfileInputs.password}
-                labelText={"password"}
-                isLabelThere={true}
-                label={"new password"}
-              />
-              <FormRow
-                type={"password"}
-                name={"confirmPassword"}
-                divClassName={"inputDiv"}
-                className={"fullWidth customInput"}
-                handleChange={handleChange}
-                value={editProfileInputs.confirmPassword}
-                labelText={"Confirm New Password"}
-                label={"Confirm New Password"}
-              />
+              <p className="changepasswordtext">{t("Change Your Password")}</p>
+              <div className="passwordChange">
+                <FormRow
+                  type={"password"}
+                  name={"password"}
+                  divClassName={"inputDiv"}
+                  className={"fullWidth customInput"}
+                  handleChange={handleChange}
+                  value={editProfileInputs.password}
+                  labelText={"password"}
+                  isLabelThere={true}
+                  label={"New Password"}
+                />
+                <FormRow
+                  type={"password"}
+                  name={"confirmPassword"}
+                  divClassName={"inputDiv"}
+                  className={"fullWidth customInput"}
+                  handleChange={handleChange}
+                  value={editProfileInputs.confirmPassword}
+                  labelText={"Confirm New Password"}
+                  label={"Confirm New Password"}
+                />
+              </div>
               <button type="submit" className="mybtn secBtn absoluteBtn">
-                Save
+                {t("Save")}
               </button>
             </div>
           </div>
         </div>
       </form>
-      {/* <Link to={`/${user.id}/settings`}>Edit profile page</Link> */}
     </div>
   );
 };

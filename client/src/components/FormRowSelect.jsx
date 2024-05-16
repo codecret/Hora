@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 const FormRowSelect = ({
   labelText,
   name,
@@ -8,11 +9,12 @@ const FormRowSelect = ({
   classSelect,
   required,
 }) => {
+  const { t } = useTranslation();
   return (
     <div className={`formRow ${classDiv}`}>
       {labelText && (
         <label htmlFor={name} className="form-label">
-          {labelText || name}
+          {t(labelText) || t(name)}
           {required && <span className={`${required}`}>*</span>}
         </label>
       )}
@@ -26,7 +28,7 @@ const FormRowSelect = ({
         {list?.map((itemValue, index) => {
           return (
             <option key={index} value={itemValue}>
-              {itemValue}
+              {t(itemValue)}
             </option>
           );
         })}

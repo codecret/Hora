@@ -2,6 +2,7 @@ import "./AppointmentItem.css";
 import { Icon } from "@iconify/react";
 import dayjs from "dayjs";
 import { convertMinutesTo24hoursTime } from "../../utils/hooks";
+import { useTranslation } from "react-i18next";
 
 const AppointmentItem = ({
   title,
@@ -11,6 +12,10 @@ const AppointmentItem = ({
   participants,
   description,
 }) => {
+  const { t, i18n } = useTranslation();
+  if (i18n.language === "tr") {
+    dayjs.locale("tr");
+  }
   const emptyStartDate = startDate || "";
   const emptyStartTime = startTime
     ? convertMinutesTo24hoursTime(startTime)
@@ -38,7 +43,7 @@ const AppointmentItem = ({
       <div className="card-rightside">
         <p className="appointment-name">
           {participants.length > 1
-            ? `${participants[0]} +${participants.length - 1} others.`
+            ? `${participants[0]} +${participants.length - 1} ${t("others")}.`
             : participants[0]}
         </p>
         <p className="appointment-description">{description}</p>

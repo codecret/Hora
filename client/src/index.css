@@ -84,8 +84,12 @@ body {
   visibility: hidden;
   border-radius: var(--border-radius);
 }
+.back-arrow {
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
 .show-dropdown {
-  visibility: visible;
+  visibility: visible !important;
 }
 .dropdown-btn {
   background: transparent;
@@ -98,7 +102,9 @@ body {
 }
 .btn-container {
   position: relative;
-  /* cursor: pointer; */
+  display: flex;
+  align-items: center;
+  margin: 0rem 0.3rem;
 }
 .active {
   background-color: var(--primary-color) !important;
@@ -117,6 +123,35 @@ body {
 .nav-link:hover {
   background: var(--grey-50);
   color: var(--grey-900);
+}
+.lang-container {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  background-color: white;
+  padding: 0.8rem;
+  position: absolute;
+  right: 0px;
+  transform: translateX(-25%);
+  width: fit-content;
+  box-shadow: var(--shadow-2);
+  text-align: center;
+  visibility: hidden;
+  border-radius: var(--border-radius);
+  z-index: 99;
+}
+.lang-icon {
+  cursor: pointer;
+}
+.lang-btn {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: black;
+  cursor: pointer;
+}
+.lang-btn:hover {
+  color: var(--primary-color);
 }
 .nav-link:hover .icon {
   color: var(--primary-500);

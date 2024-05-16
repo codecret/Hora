@@ -132,7 +132,7 @@
   height: 100%;
 }
 .searchbar-container {
-  height: 70px;
+  height: fit-content;
   margin-top: 20px;
   display: flex;
   flex-direction: row;

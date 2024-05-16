@@ -5,6 +5,12 @@
   padding: 1.5rem 1rem;
   font-family: var(--bodyFont);
 }
+.navBtns {
+  display: flex;
+}
+.lang-container {
+  top: 50px !important;
+}
 .nav-login-btn {
   background-color: transparent;
 }

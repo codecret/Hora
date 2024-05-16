@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 export const FormRow = ({
   type,
   name,
@@ -10,11 +11,12 @@ export const FormRow = ({
   label,
   required,
 }) => {
+  const { t } = useTranslation();
   return (
     <div id="search-field" className={`${divClassName}`}>
       {isLabelThere && (
         <label htmlFor={name} className="labelStyle">
-          {label}
+          {t(label)}
           {required && <span className={`${required && "required"}`}>*</span>}
         </label>
       )}
@@ -25,7 +27,7 @@ export const FormRow = ({
           name={name}
           onChange={handleChange}
           className={`inputLogin ${className}`}
-          placeholder={labelText}
+          placeholder={t(labelText)}
           autoComplete={type === "password" ? "on" : "off"}
         />
       }

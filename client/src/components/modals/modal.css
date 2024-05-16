@@ -17,6 +17,17 @@
   padding: none !important;
   margin: 0.5rem 0rem !important;
 }
+.modalInput1 {
+  border: none !important;
+  outline: none;
+  background-color: transparent !important;
+  border-radius: 0px !important;
+  border-bottom: 1px solid var(--grey-600) !important;
+  margin: 0.5rem 0rem !important;
+  border-radius: 5px;
+  padding: 0.3rem;
+  width: 100%;
+}
 .modalDatePart {
   width: 100%;
   display: flex;

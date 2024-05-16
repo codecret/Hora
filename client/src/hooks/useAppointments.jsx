@@ -3,6 +3,7 @@ import { authFetch } from "../utils/fetch";
 import toast from "react-hot-toast";
 import dayjs from "dayjs";
 import { convert24hoursToMinutesTime, useDebounce } from "../utils/hooks";
+import { useTranslation } from "react-i18next";
 
 async function getAppointmentsAsync() {
   const { data } = await authFetch("/appointment");
@@ -83,20 +84,21 @@ const addAppointmentAsync = ({
 
 export const useAddAppointment = ({ setAppointmentStates, setIsModalOpen }) => {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: addAppointmentAsync,
     onError: (e) => {
       if (e.response && e.response.status === 401) {
-        toast.error("UnAuthenticated User Should Logout");
+        toast.error(t("UnAuthenticated User Should Logout"));
         //TODO: LOGOUT
       } else {
-        toast.error(e.response?.data?.msg ?? "an error");
+        toast.error(e.response?.data?.msg ?? t("an error"));
       }
     },
     onSuccess: (response) => {
       if (response && response.status === 201) {
-        toast.success("Create Appointment Success");
+        toast.success(t("Create Appointment Success"));
       }
       setAppointmentStates({
         appointmentName: "",
@@ -145,20 +147,21 @@ export const useEditAppointment = ({
   setIsModalOpen,
 }) => {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: editAppointmentAsync,
     onError: (e) => {
       if (e.response && e.response.status === 401) {
-        toast.error("UnAuthenticated User Should Logout");
+        toast.error(t("UnAuthenticated User Should Logout"));
         //TODO: LOGOUT
       } else {
-        toast.error(e.response.data.msg);
+        toast.error(e.response?.data?.msg ?? t("an error"));
       }
     },
     onSuccess: (response) => {
       if (response && response.status === 200) {
-        toast.success("Project Edited");
+        toast.success(t("Appointment Edited"));
       }
       setAppointmentStates({
         appointmentName: "",
@@ -181,15 +184,16 @@ const deleteAppointmentAsync = ({ id }) => {
 };
 export const useDeleteAppointment = () => {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: deleteAppointmentAsync,
     onError: (e) => {
       if (e.response && e.response.status === 401) {
-        toast.error("UnAuthenticated User Should Logout");
+        toast.error(t("UnAuthenticated User Should Logout"));
         //TODO: LOGOUT
       } else {
-        toast.error(e.response.data.msg);
+        toast.error(e.response?.data?.msg ?? t("an error"));
       }
     },
     onSuccess: () => {

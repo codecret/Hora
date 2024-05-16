@@ -5,6 +5,7 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppProvider } from "./context/appContext.jsx";
+import "./translation.js";
 
 const queryClient = new QueryClient();
 

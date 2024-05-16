@@ -1,4 +1,8 @@
-import { DatePicker, TimePicker } from "@mui/x-date-pickers";
+import {
+  DatePicker,
+  LocalizationProvider,
+  TimePicker,
+} from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { handleOverlayClick } from "../../utils/hooks";
 import FormRow from "../FormRow";
@@ -19,6 +23,11 @@ import {
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { useTranslation } from "react-i18next";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import i18n from "i18next";
+import "dayjs/locale/tr";
+import "dayjs/locale/en";
 
 const animatedComponents = makeAnimated();
 dayjs.extend(customParseFormat);
@@ -31,7 +40,7 @@ const AddAppointmentWindow = ({
   editedId,
   dates,
 }) => {
-  // console.log("dates", dates);
+  const { t } = useTranslation();
   const { appointmentStatusOptions } = useAppContext();
   const [inputValue, setInputValue] = useState("");
   const [appointmentStates, setAppointmentStates] = useState({
@@ -123,11 +132,11 @@ const AddAppointmentWindow = ({
         (member) => member.value === inputValue
       )
     ) {
-      toast.error("Duplicated.");
+      toast.error(t("Duplicated."));
       return;
     }
     if (appointmentStates.appointmentParticipates.length > 9) {
-      toast.error("Participates cannot be more than 9.");
+      toast.error(t("Participates cannot be more than 9."));
       return;
     }
     switch (event.key) {
@@ -176,7 +185,7 @@ const AddAppointmentWindow = ({
           }}
         />
         <h2 className="modalHeader">
-          {editedId ? "Edit Appointment" : "Add Appointment"}
+          {editedId ? t("Edit Appointment") : t("Add Appointment")}
         </h2>
 
         <FormRow
@@ -186,7 +195,7 @@ const AddAppointmentWindow = ({
           value={appointmentStates.appointmentName}
           handleChange={handleChangeInputs}
           divClassName={"w-100 modalDiv"}
-          className={"w-100 modalInput"}
+          className={"w-100 modalInput1"}
           isLabelThere={true}
           labelText={"Meeting Title"}
           label={"Appointment Name:"}
@@ -199,36 +208,40 @@ const AddAppointmentWindow = ({
           handleChange={handleChangeInputs}
           list={[...appointmentStatusOptions]}
         />
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          adapterLocale={i18n?.language}
+        >
+          <div className="modalDatePart">
+            <StyledDatePicker
+              label={t("Start Date")}
+              value={appointmentStates.startDate}
+              onChange={(newValue) => handleDate("startDate", newValue)}
+              format="DD-MM-YYYY"
+            />
+            <StyledDatePicker
+              label={t("End Date")}
+              value={appointmentStates.endDate}
+              onChange={(newValue) => handleDate("endDate", newValue)}
+              format="DD-MM-YYYY"
+            />
+          </div>
+          <div className="modalDatePart">
+            <StyledTimePicker
+              label={t("Start time")}
+              value={appointmentStates.startTime}
+              onChange={(newValue) => handleDate("startTime", newValue)}
+              format="hh:mm A"
+            />
+            <StyledTimePicker
+              label={t("Due time")}
+              value={appointmentStates.endTime}
+              onChange={(newValue) => handleDate("endTime", newValue)}
+              format="hh:mm A"
+            />
+          </div>
+        </LocalizationProvider>
 
-        <div className="modalDatePart">
-          <StyledDatePicker
-            label="Start Date"
-            value={appointmentStates.startDate}
-            // onChange={(newValue) => setValue(newValue)}
-            onChange={(newValue) => handleDate("startDate", newValue)}
-            format="DD-MM-YYYY"
-          />
-          <StyledDatePicker
-            label="End Date"
-            value={appointmentStates.endDate}
-            onChange={(newValue) => handleDate("endDate", newValue)}
-            format="DD-MM-YYYY"
-          />{" "}
-        </div>
-        <div className="modalDatePart">
-          <StyledTimePicker
-            label="Start time"
-            value={appointmentStates.startTime}
-            onChange={(newValue) => handleDate("startTime", newValue)}
-            format="hh:mm A"
-          />
-          <StyledTimePicker
-            label="Due time"
-            value={appointmentStates.endTime}
-            onChange={(newValue) => handleDate("endTime", newValue)}
-            format="hh:mm A"
-          />
-        </div>
         <CreatableSelect
           components={animatedComponents}
           inputValue={inputValue}
@@ -243,7 +256,7 @@ const AddAppointmentWindow = ({
           }
           onInputChange={(newValue) => setInputValue(newValue)}
           onKeyDown={handleKeyDown}
-          placeholder="Type something and press enter..."
+          placeholder={t("Type something and press enter...")}
           value={appointmentStates.appointmentParticipates}
         />
         <FormRow
@@ -253,7 +266,7 @@ const AddAppointmentWindow = ({
           value={appointmentStates.appointmentDescription}
           handleChange={handleChangeInputs}
           divClassName={"w-100 modalDiv"}
-          className={"w-100 modalInput"}
+          className={"w-100 modalInput1"}
           label={"Description:"}
           isLabelThere={true}
           labelText={"Lorem ipsum dolor sit amet, consectetur "}
@@ -262,7 +275,7 @@ const AddAppointmentWindow = ({
           className="reset-btn createBtn animatedBtn"
           onClick={handleCreateProject}
         >
-          {editedId ? "Edit Appointment" : "Create Appointment"}
+          {editedId ? t("Edit Appointment") : t("Create Appointment")}
         </button>
         {editedId && (
           <button
@@ -271,7 +284,7 @@ const AddAppointmentWindow = ({
               deleteAppointment({ id: editedId });
             }}
           >
-            Delete Appointment
+            {t("Delete Appointment")}
           </button>
         )}
       </div>

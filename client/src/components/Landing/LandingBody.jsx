@@ -2,14 +2,19 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import calendar from "/calendar.svg";
 import calendarnewone from "/calendarnewone.png";
 import calendarnewtwo from "/calendarnewtwo.png";
+import { useTranslation } from "react-i18next";
 
 const LandingBody = ({ handleNavigate }) => {
+  const { t } = useTranslation();
+
   return (
     <div>
       <div className="landing-body">
-        <p className="landing-b-header">Seamless Scheduling Made Simple</p>
+        <p className="landing-b-header">
+          {t("Seamless Scheduling Made Simple")}
+        </p>
         <p className="landing-b-sub">
-          Your Calendar&apos;s Best Companion for Effortless Appointments
+          {t("Your Calendar's Best Companion for Effortless Appointments")}
         </p>
       </div>
       <div className="landing-sub">
@@ -30,15 +35,16 @@ const LandingBody = ({ handleNavigate }) => {
         </div>
       </div>
       <footer className="landing-footer">
-        <p className="landing-b-header">Begin Your Journey Today</p>
+        <p className="landing-b-header">{t("Begin Your Journey Today")}</p>
         <p className="landing-b-sub">
-          Your Path to Efficient Scheduling Starts Here
+          {t("Your Path to Efficient Scheduling Starts Here")}
         </p>
         <button
           className="mybtn custom-btn gradient-btn footerbtn"
           onClick={(e) => handleNavigate(e, "signup")}
         >
-          Get Started <IoIosArrowRoundForward size={30} />
+          {t("Get Started")}
+          <IoIosArrowRoundForward size={30} />
         </button>
       </footer>
     </div>

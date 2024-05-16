@@ -11,6 +11,8 @@ import dayjs from "dayjs";
 import { convertMinutesTo24hoursTime } from "../../utils/hooks";
 import FullCalendar from "@fullcalendar/react";
 import { StyledCalendar } from "../../assets/styles";
+import { useTranslation } from "react-i18next";
+import allLocales from "@fullcalendar/core/locales-all";
 
 const COLOR_OPTIONS = [
   "#00AB55",
@@ -21,6 +23,7 @@ const COLOR_OPTIONS = [
   "#7A0C2E",
 ];
 const CalendarPage = () => {
+  const { t, i18n } = useTranslation();
   const calendarRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editedId, setEditedId] = useState("");
@@ -86,7 +89,7 @@ const CalendarPage = () => {
         document.body
       )}
       <div className="header">
-        <p>Make Appointment</p>
+        <p>{t("Make Appointment")}</p>
         <button
           className="reset-btn custom-btn"
           onClick={() => {
@@ -94,7 +97,7 @@ const CalendarPage = () => {
             setIsModalOpen(!isModalOpen);
           }}
         >
-          Add
+          <p>{t("Add")}</p>
         </button>
       </div>
       <StyledCalendar>
@@ -108,6 +111,8 @@ const CalendarPage = () => {
           height="calc(100vh - 200px)"
           eventResizableFromStart
           ref={calendarRef}
+          locales={allLocales}
+          locale={i18n.language}
           // initialDate={date}
           // initialView={view}
           dayMaxEventRows={3}

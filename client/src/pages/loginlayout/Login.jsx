@@ -2,8 +2,10 @@ import "./Login.css";
 import FormRow from "../../components/FormRow";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useGetAuth, useLoginAuth, useRegisterUser } from "../../hooks/useAuth";
+import { useTranslation } from "react-i18next";
+import { IoIosArrowRoundBack } from "react-icons/io";
 
 const initialState = {
   name: "",
@@ -12,6 +14,8 @@ const initialState = {
   isMember: false,
 };
 const Login = () => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const [isLoading, setLoading] = useState(false);
   const [values, setValues] = useState(initialState);
   const { mutateAsync: loginUser } = useLoginAuth({ setLoading });
@@ -61,6 +65,9 @@ const Login = () => {
     }
     setLoading(false);
   };
+  const handleNavigateHome = () => {
+    navigate("/");
+  };
   return (
     <div className="container-full-width-height">
       <div>
@@ -68,13 +75,16 @@ const Login = () => {
       </div>
       <div className="login-container">
         <div className="left-container">
-          {values.isMember && (
-            <Link to={"/forgot-password"} className="forgotText">
-              Forgot Password?
-            </Link>
-          )}
-          <h2>{values.isMember ? "Login" : "SignUp"}</h2>
-          <p className="sub-title">Secure Your Communication with Hora</p>
+          <IoIosArrowRoundBack
+            className="back-arrow"
+            size={19}
+            onClick={handleNavigateHome}
+          />
+
+          <h2>{values.isMember ? t("Login") : t("Sign Up")}</h2>
+          <p className="sub-title">
+            {t("Secure Your Communication with Hora")}
+          </p>
           {!values.isMember && (
             <FormRow
               type="text"
@@ -114,18 +124,27 @@ const Login = () => {
             disabled={isLoading}
             onClick={onSubmit}
           >
-            {values.isMember ? "Login" : "Register"}
+            {values.isMember ? t("Login") : t("Register")}
           </button>
-          <p className="notmember">
-            {values.isMember ? "Not a member yet?" : "Already a member?"}
-            <button
-              type="button"
-              onClick={toggleMember}
-              className="reset-btn member-btn"
-            >
-              {values.isMember ? "Register" : "Login"}
-            </button>
-          </p>
+          <div className="login-lower">
+            <p className="notmember">
+              {values.isMember
+                ? t("Not a member yet?")
+                : t("Already a member?")}
+              <button
+                type="button"
+                onClick={toggleMember}
+                className="reset-btn member-btn"
+              >
+                {values.isMember ? t("Register") : t("Login")}
+              </button>
+            </p>
+            {values.isMember && (
+              <Link to={"/forgot-password"} className="forgotText">
+                {t("Forgot Password?")}
+              </Link>
+            )}
+          </div>
         </div>
         <div className="right-container"></div>
       </div>
