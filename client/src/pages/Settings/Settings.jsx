@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useEditProfile } from "../../hooks/useAuth";
 import { useTranslation } from "react-i18next";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/material.css";
 
 const Settings = () => {
   const { t } = useTranslation();
@@ -71,7 +73,12 @@ const Settings = () => {
       [name]: value,
     });
   };
-
+  const handleChangePhone = (name, value) => {
+    setEditProfileInputs({
+      ...editProfileInputs,
+      [name]: value,
+    });
+  };
   return (
     <div className="sectionPadding">
       <form
@@ -95,7 +102,7 @@ const Settings = () => {
           )}
 
           <div className="btnContainer">
-            <label className="mybtn secBtn" htmlFor="fileInput">
+            <label className="mybtn secBtn change-pic-btn" htmlFor="fileInput">
               {t("Change Picture")}
               <input
                 id="fileInput"
@@ -140,17 +147,13 @@ const Settings = () => {
                 isLabelThere={true}
                 label={"New Email"}
               />
-
-              <FormRow
-                type={"number"}
-                name={"phoneNumber"}
-                divClassName={"inputDiv"}
-                className={"fullWidth customInput"}
-                handleChange={handleChange}
+              <PhoneInput
+                country={"tr"}
+                specialLabel={t("Phone Number")}
                 value={editProfileInputs.phoneNumber}
-                labelText={"Phone Number"}
-                isLabelThere={true}
-                label={"Phone Number"}
+                onChange={(phone) => {
+                  handleChangePhone("phoneNumber", phone);
+                }}
               />
             </div>
 

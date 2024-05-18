@@ -77,7 +77,7 @@ const Login = () => {
         <div className="left-container">
           <IoIosArrowRoundBack
             className="back-arrow"
-            size={19}
+            size={23}
             onClick={handleNavigateHome}
           />
 

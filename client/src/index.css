@@ -224,6 +224,9 @@ p {
   right: 20px;
   font-size: 40px;
 }
+.btnContainer {
+  display: flex;
+}
 .createBtn {
   margin-top: 1rem;
   border: none;
@@ -290,4 +293,21 @@ p {
 .deleteBtn {
   background: #fb6c58 !important;
   margin-left: 1rem;
+}
+.cancleBtn {
+  margin-left: 1rem;
+  background: #c95049 !important;
+}
+.addBtn {
+  padding: 0.4rem 3rem !important;
+}
+/* phone number */
+.react-tel-input .form-control {
+  width: 100%;
+}
+.react-tel-input {
+  margin: 0.5rem 0rem !important;
+}
+.form-control {
+  padding: 10.5px 14px 10.5px 58px !important;
 }

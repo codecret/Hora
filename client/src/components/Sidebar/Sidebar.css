@@ -12,7 +12,8 @@
 
 .sidebar h1 {
   font-size: 20px;
-  color: #d3e763;
+  /* color: #d3e763; */
+  color: #3668f8;
   text-align: center;
   cursor: pointer;
   font-family: "poppins-regular", sans-serif;

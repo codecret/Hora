@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { useEffect } from "react";
 import { useState } from "react";
 
@@ -43,4 +44,15 @@ export const useDebounce = (value, delay) => {
   }, [value, delay]);
 
   return debouncedValue;
+};
+
+export const combineDateAndTime = (date, time) => {
+  const startDateParts = date.split("T");
+  const startTimeConvertedToHours = convertMinutesTo24hoursTime(time);
+  let startDateTimeCombined = `${startDateParts[0]}T${startTimeConvertedToHours}`; // Split the endDate into date and time parts
+  startDateTimeCombined = dayjs(startDateTimeCombined).tz(
+    "Europe/Istanbul",
+    true
+  );
+  return startDateTimeCombined;
 };

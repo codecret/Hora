@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
 .navContainer {
   background-color: #f7f7f7;
   display: flex;
@@ -7,14 +10,21 @@
 }
 .navBtns {
   display: flex;
+  align-items: center;
 }
 .lang-container {
   top: 50px !important;
 }
 .nav-login-btn {
+  font-size: 18px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
   background-color: transparent;
 }
 .secBtn {
+  font-size: 18px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
   padding: 0.5rem 1rem !important;
   background-color: #3668f8 !important;
 }
@@ -61,7 +71,7 @@
   );
   background-clip: text;
   color: transparent;
-  font-family: "Montserrat-Bold", Helvetica;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   letter-spacing: 0;
   line-height: normal;
@@ -102,7 +112,8 @@
 .landing-hero-par {
   margin-top: 2em !important;
   color: black;
-  font-weight: lighter;
+  font-weight: 300;
+  font-family: "Poppins", sans-serif;
 }
 .topLefttImgHero {
   position: absolute;
@@ -150,7 +161,8 @@
 }
 .landing-b-sub {
   font-size: 1rem;
-  font-weight: lighter;
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
 }
 .landing-sub {
   /* height: 700px; */

@@ -192,6 +192,16 @@
   .dashboard-container {
     grid-template-columns: 1fr;
   }
+  .headingContainer,
+  .logoutContainer {
+    display: none;
+  }
+  .sidebarBody {
+    width: 100%;
+    justify-content: space-around;
+    margin: 0px;
+    padding: 0px;
+  }
   .dashboard-right-column {
     width: auto;
     margin-left: 0rem;
@@ -211,5 +221,21 @@
 @media (max-width: 768px) {
   .dashboard-right-column {
     overflow: auto;
+  }
+  /* .dashboard-container {
+    height: 110vh;
+  } */
+  .sidebar-left-column {
+    background-color: transparent !important;
+    width: 100% !important;
+    margin-left: 0rem;
+  }
+  .sidebar {
+    width: 95% !important;
+    margin: 0px auto !important;
+    background-color: #000000 !important;
+  }
+  .two-column-div {
+    height: auto;
   }
 }

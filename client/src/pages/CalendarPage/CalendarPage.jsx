@@ -7,8 +7,7 @@ import { useGetAppointments } from "../../hooks/useAppointments";
 import Loader from "../../components/Loader";
 import listPlugin from "@fullcalendar/list";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import dayjs from "dayjs";
-import { convertMinutesTo24hoursTime } from "../../utils/hooks";
+import { combineDateAndTime } from "../../utils/hooks";
 import FullCalendar from "@fullcalendar/react";
 import { StyledCalendar } from "../../assets/styles";
 import { useTranslation } from "react-i18next";
@@ -33,23 +32,12 @@ const CalendarPage = () => {
     if (data?.appointments) {
       const events = data?.appointments?.map((e, index) => {
         // Split the startDate into date and time parts
-        const startDateParts = e.startDate.split("T");
-        const startTimeConvertedToHours = convertMinutesTo24hoursTime(
+        const startDateTimeCombined = combineDateAndTime(
+          e.startDate,
           e.startTime
         );
-        let startDateTimeCombined = `${startDateParts[0]}T${startTimeConvertedToHours}`; // Split the endDate into date and time parts
-        startDateTimeCombined = dayjs(startDateTimeCombined).tz(
-          "Europe/Istanbul",
-          true
-        );
+        const endDateTimeCombined = combineDateAndTime(e.endDate, e.endTime);
 
-        const endDateParts = e.endDate.split("T");
-        const endTimeConvertedToHours = convertMinutesTo24hoursTime(e.endTime);
-        let endDateTimeCombined = `${endDateParts[0]}T${endTimeConvertedToHours}`; // Split the endDate into date and time parts
-        endDateTimeCombined = dayjs(endDateTimeCombined).tz(
-          "Europe/Istanbul",
-          true
-        );
         return {
           id: e._id,
           title: e.title,
@@ -91,7 +79,7 @@ const CalendarPage = () => {
       <div className="header">
         <p>{t("Make Appointment")}</p>
         <button
-          className="reset-btn custom-btn"
+          className="reset-btn custom-btn addBtn"
           onClick={() => {
             setEditedId("");
             setIsModalOpen(!isModalOpen);

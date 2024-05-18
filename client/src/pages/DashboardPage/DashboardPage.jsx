@@ -5,6 +5,7 @@ import Loader from "../../components/Loader";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { useTranslation } from "react-i18next";
+import { combineDateAndTime } from "../../utils/hooks";
 
 const DashboardPage = () => {
   const { t } = useTranslation();
@@ -13,7 +14,6 @@ const DashboardPage = () => {
   if (isLoading || isFetching) {
     return <Loader />;
   }
-  console.log(data);
   const transformedData = Object.entries(data.statusMap).map(
     ([label, value], id) => ({
       id,
@@ -21,6 +21,16 @@ const DashboardPage = () => {
       label: t(label),
     })
   );
+  const now = new Date();
+  console.log(now);
+  const upcomingAppointments = data.appointments?.filter((appointment) => {
+    const startDateTimeCombined = combineDateAndTime(
+      appointment.startDate,
+      appointment.startTime
+    );
+    return startDateTimeCombined >= now;
+  });
+
   const hasData = data?.appointments.length > 0;
   return (
     <div className="two-column-div">
@@ -30,7 +40,7 @@ const DashboardPage = () => {
             {t("Upcoming Appointments")}
           </h2>
 
-          {data.appointments?.slice(0, 3).map((appointment, index) => (
+          {upcomingAppointments.map((appointment, index) => (
             <AppointmentItem key={index} {...appointment} />
           ))}
         </div>

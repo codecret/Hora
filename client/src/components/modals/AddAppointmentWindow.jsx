@@ -71,7 +71,6 @@ const AddAppointmentWindow = ({
   const StyledTimePicker = styled(TimePicker)({
     margin: "10px 10px 10px 0px",
   });
-  // console.log("appointmentStates", appointmentStates);
   useEffect(() => {
     const selectedAppointment = dates.find((ele) => ele.id == editedId);
     if (editedId && selectedAppointment && isModalOpen === true) {
@@ -157,7 +156,19 @@ const AddAppointmentWindow = ({
         event.preventDefault();
     }
   };
-
+  const handleCancleButton = () => {
+    setIsModalOpen(false);
+    setAppointmentStates({
+      appointmentName: "",
+      appointmentDescription: "",
+      status: "Scheduled",
+      appointmentParticipates: [],
+      startDate: dayjs(),
+      endDate: dayjs(),
+      startTime: dayjs(),
+      endTime: dayjs(),
+    });
+  };
   return (
     <div
       className={`overlay ${isModalOpen ? "trueWindow" : "falseWindow"}`}
@@ -198,10 +209,10 @@ const AddAppointmentWindow = ({
           className={"w-100 modalInput1"}
           isLabelThere={true}
           labelText={"Meeting Title"}
-          label={"Appointment Name:"}
+          label={"Appointment Name: "}
         />
         <FormRowSelect
-          labelText="Status:"
+          labelText={"Status: "}
           name="status"
           required={"required"}
           value={appointmentStates.status}
@@ -256,7 +267,7 @@ const AddAppointmentWindow = ({
           }
           onInputChange={(newValue) => setInputValue(newValue)}
           onKeyDown={handleKeyDown}
-          placeholder={t("Type something and press enter...")}
+          placeholder={t("Add Participates")}
           value={appointmentStates.appointmentParticipates}
         />
         <FormRow
@@ -267,9 +278,10 @@ const AddAppointmentWindow = ({
           handleChange={handleChangeInputs}
           divClassName={"w-100 modalDiv"}
           className={"w-100 modalInput1"}
-          label={"Description:"}
           isLabelThere={true}
-          labelText={"Lorem ipsum dolor sit amet, consectetur "}
+          required={"required"}
+          labelText={"Write a description"}
+          label={"Description: "}
         />
         <button
           className="reset-btn createBtn animatedBtn"
@@ -277,6 +289,15 @@ const AddAppointmentWindow = ({
         >
           {editedId ? t("Edit Appointment") : t("Create Appointment")}
         </button>
+
+        {!editedId && (
+          <button
+            className="reset-btn createBtn animatedBtn deleteBtn"
+            onClick={handleCancleButton}
+          >
+            {t("Cancle Appointment")}
+          </button>
+        )}
         {editedId && (
           <button
             className="reset-btn createBtn animatedBtn deleteBtn"
