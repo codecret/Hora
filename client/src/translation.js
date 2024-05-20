@@ -92,6 +92,22 @@ const resources = {
       "Appointment Edited": "Appointment Edited",
       "Cancle Appointment": "Cancle Appointment",
       "Add Participates": "Add Participates",
+      "Forgot Password": "Forgot Password",
+      "Please fill the email": "Please fill the email",
+      "Reset password email sent successfully!":
+        "Reset password email sent successfully!",
+      "Don't worry, it happens to all of us. Enter your email below to recover your password":
+        "Don't worry, it happens to all of us. Enter your email below to recover your password",
+      "Sending...": "Sending...",
+      "Send Code": "Send Code",
+      "Check your email": "Check your email",
+      "We’ve sent password recovery instructions to":
+        "We’ve sent password recovery instructions to",
+      "Reset your Password": "Reset your Password",
+      "Passwords do not match": "Passwords do not match",
+      "Password reset successfully!": "Password reset successfully!",
+      "Verify Password": "Verify Password",
+      Send: "Send",
     },
   },
   tr: {
@@ -187,6 +203,22 @@ const resources = {
       "Appointment Edited": "Randevu Düzenlendi",
       "Cancle Appointment": "Randevuyu İptal",
       "Add Participates": "Katılımcı Ekle",
+      "Forgot Password": "Şifremi Unuttum",
+      "Please fill the email": "Lütfen e-posta adresinizi girin",
+      "Reset password email sent successfully!":
+        "Şifre sıfırlama e-postası başarıyla gönderildi!",
+      "Don't worry, it happens to all of us. Enter your email below to recover your password":
+        "Endişelenme, hepimizin başına geliyor. Şifrenizi kurtarmak için aşağıya e-posta adresinizi girin",
+      "Sending...": "Gönderiliyor...",
+      "Send Code": "Kodu Gönder",
+      "Check your email": "E-postanızı kontrol edin",
+      "We’ve sent password recovery instructions to":
+        "Şifre kurtarma talimatlarını e-posta adresinize gönderdik",
+      "Reset your Password": "Şifrenizi Sıfırlayın",
+      "Passwords do not match": "Şifreler uyuşmuyor",
+      "Password reset successfully!": "Şifre başarıyla sıfırlandı!",
+      "Verify Password": "Şifreyi Doğrulayın",
+      Send: "Gönder",
     },
   },
 };

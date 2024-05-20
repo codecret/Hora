@@ -10,6 +10,8 @@ import {
   updateUser,
   getCurrentUser,
   editProfile,
+  forgotPassword,
+  resetPassword,
 } from "../controllers/authController.js";
 import { withAuth } from "../middleware/auth.js";
 import ImgUpload from "../middleware/imgUpload.js";
@@ -31,5 +33,7 @@ router.route("/getCurrentUser").get(withAuth, getCurrentUser);
 router
   .route("/editProfile")
   .post(multer.single("file"), ImgUpload.uploadToGcs, withAuth, editProfile);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 
 export default router;

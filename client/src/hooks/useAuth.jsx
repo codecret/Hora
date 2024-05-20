@@ -158,3 +158,42 @@ export const useLogoutUser = () => {
     },
   });
 };
+const resetPasswordAsync = ({ password, token }) => {
+  return authFetch.post("/auth/reset-password", {
+    password,
+    token,
+  });
+};
+export const useResetPassword = () => {
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: resetPasswordAsync,
+    onError: (e) => {
+      toast.error(e.response.data.msg);
+    },
+    onSuccess: () => {
+      toast.success("Reset Password Success!");
+      setTimeout(() => {
+        navigate("/login");
+      }, 500);
+    },
+  });
+};
+
+const forgotPasswordAsync = ({ email }) => {
+  return authFetch.post("/auth/forgot-password", {
+    email,
+  });
+};
+export const useForgotPassword = ({ setShowFields }) => {
+  return useMutation({
+    mutationFn: forgotPasswordAsync,
+    onError: (e) => {
+      toast.error(e.response.data.msg);
+    },
+    onSuccess: () => {
+      setShowFields(false);
+    },
+  });
+};

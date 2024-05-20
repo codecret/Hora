@@ -1,7 +1,13 @@
 import User from "../models/User.js";
+import Token from "../models/Token.js";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, UnAuthenticatedError } from "../errors/index.js";
 import attachCookie from "../utils/attachCookies.js";
+import { generateToken } from "../utils/token.js";
+import { sendResetPasswordEmail } from "../services/emailService.js";
+import tokenTypes from "../config/tokens.js";
+import moment from "moment";
+import { verifyToken } from "../services/tokenservice.js";
 
 const CreateUser = async (req, res) => {
   const { password, name, email } = req.body;
@@ -92,12 +98,10 @@ const editProfile = async (req, res) => {
   const { password, name, email, phoneNumber } = editProfileInputs;
   let user = await User.findOne({ _id: userId });
   let photoUrl = null;
-  console.log(req.file);
   if (req.file) {
     photoUrl = req.file.cloudStoragePublicUrl;
   }
 
-  console.log(user);
   if (!user) {
     throw new NotFoundError(`User with id ${userId} not found.`);
   }
@@ -114,6 +118,48 @@ const editProfile = async (req, res) => {
   res.status(StatusCodes.OK).json({ user });
 };
 
+const forgotPassword = async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    throw new UnAuthenticatedError("No user found with thie email address.");
+  }
+  const expires = moment().add(process.env.RESET_PASSWORD, "minutes");
+
+  const resetPasswordToken = generateToken(
+    user._id,
+    expires,
+    tokenTypes.RESET_PASSWORD
+  );
+  const tokenDoc = await Token.create({
+    token: resetPasswordToken,
+    user: user._id,
+    expires: expires.toDate(),
+    type: tokenTypes.RESET_PASSWORD,
+    blacklisted: false,
+  });
+
+  await sendResetPasswordEmail(req.body.email, tokenDoc);
+  res.status(StatusCodes.NO_CONTENT).send();
+};
+
+const resetPassword = async (req, res) => {
+  const { token } = req.body;
+  const resetPasswordTokenDoc = await verifyToken(
+    token,
+    tokenTypes.RESET_PASSWORD
+  );
+
+  const user = await User.findOne({ _id: resetPasswordTokenDoc.user });
+  if (!user) {
+    throw new NotFoundError("Not Found User");
+  }
+  const userUpdated = await User.findOne({ _id: user.id });
+  userUpdated.password = req.body.password;
+  await userUpdated.save();
+  await Token.deleteMany({ user: user.id, type: tokenTypes.RESET_PASSWORD });
+
+  res.status(StatusCodes.NO_CONTENT).send();
+};
 export {
   CreateUser,
   allUsers,
@@ -123,4 +169,6 @@ export {
   deleteUser,
   getCurrentUser,
   editProfile,
+  forgotPassword,
+  resetPassword,
 };

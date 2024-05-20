@@ -63,6 +63,9 @@ body {
   align-items: center;
   cursor: pointer;
 }
+.w-100 {
+  width: 100%;
+}
 .profileImg {
   border-radius: 20px;
 }
@@ -77,6 +80,7 @@ body {
   flex-direction: column;
   left: 0;
   width: 100%;
+  max-width: 100px;
   background: var(--primary-color);
   box-shadow: var(--shadow-2);
   padding: 0.5rem;
@@ -310,4 +314,9 @@ p {
 }
 .form-control {
   padding: 10.5px 14px 10.5px 58px !important;
+}
+@media (max-width: 768px) {
+  .right-container-forget-password {
+    display: none;
+  }
 }
