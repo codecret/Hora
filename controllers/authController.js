@@ -7,7 +7,7 @@ import { generateToken } from "../utils/token.js";
 import { sendResetPasswordEmail } from "../services/emailService.js";
 import tokenTypes from "../config/tokens.js";
 import moment from "moment";
-import { verifyToken } from "../services/tokenservice.js";
+import { verifyToken } from "../services/tokenService.js";
 
 const CreateUser = async (req, res) => {
   const { password, name, email } = req.body;
