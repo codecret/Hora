@@ -22,7 +22,6 @@ const DashboardPage = () => {
     })
   );
   const now = new Date();
-  console.log(now);
   const upcomingAppointments = data.appointments?.filter((appointment) => {
     const startDateTimeCombined = combineDateAndTime(
       appointment.startDate,

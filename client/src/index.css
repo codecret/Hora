@@ -315,8 +315,19 @@ p {
 .form-control {
   padding: 10.5px 14px 10.5px 58px !important;
 }
+.buttonContainer {
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+}
 @media (max-width: 768px) {
   .right-container-forget-password {
     display: none;
+  }
+  .deleteBtn {
+    margin-left: 0rem !important;
+  }
+  .buttonContainer {
+    flex-direction: column;
   }
 }

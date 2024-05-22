@@ -24,9 +24,19 @@ const AppointmentSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please Choose A description"],
     },
-    participants: {
-      type: [String], // Array of strings
-    },
+    participants: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    notRegisteredParticipants: [
+      {
+        email: {
+          type: String,
+        },
+      },
+    ],
     status: {
       type: String,
       enum: ["Scheduled", "Canceled", "Completed"],

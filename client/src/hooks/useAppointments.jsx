@@ -59,22 +59,11 @@ const addAppointmentAsync = ({
   let convertedStartTime = convert24hoursToMinutesTime(startTime);
   let convertedEndTime = convert24hoursToMinutesTime(endTime);
 
-  const appointment = appointmentParticipates?.map((ele) => ele.value);
-  console.log(
-    appointmentName,
-    appointmentDescription,
-    status,
-    appointment,
-    startDate,
-    endDate,
-    convertedStartTime,
-    convertedEndTime
-  );
   return authFetch.post("/appointment", {
     appointmentName,
     appointmentDescription,
     status,
-    appointmentParticipates: appointment,
+    appointmentParticipates,
     startDate,
     endDate,
     startTime: convertedStartTime,

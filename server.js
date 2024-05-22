@@ -14,6 +14,7 @@ import { createServer } from "http";
 //Routes
 import authRouter from "./routes/authRoutes.js";
 import appointmentRouter from "./routes/appointmentRoutes.js";
+import approvalRouter from "./routes/approvalRoutes.js";
 
 //middleware
 import cors from "cors";
@@ -45,6 +46,7 @@ app.use(express.static(path.resolve(__dirname, "./client/dist")));
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/appointment", withAuth, appointmentRouter);
+app.use("/api/v1/approvals", withAuth, approvalRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

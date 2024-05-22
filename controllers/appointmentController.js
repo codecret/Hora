@@ -1,8 +1,11 @@
 import Appointment from "../models/Appointment.js";
+import User from "../models/User.js";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError } from "../errors/index.js";
 import moment from "moment";
 import mongoose from "mongoose";
+import { sendMultipleEmails } from "../services/emailService.js";
+import Approvals from "../models/Approvals.js";
 
 const createAppointment = async (req, res) => {
   let {
@@ -26,6 +29,21 @@ const createAppointment = async (req, res) => {
     endDate = new Date(endDate);
   }
 
+  // first check if the email already in system or not
+  // if the user is in system send an email if not send him email join hora.
+  const users = await User.find();
+
+  const participantIds = [];
+  const notRegisteredParticipantIds = [];
+  appointmentParticipates.forEach((participant) => {
+    if (mongoose.Types.ObjectId.isValid(participant.value)) {
+      participantIds.push(participant.value);
+    } else {
+      notRegisteredParticipantIds.push({ email: participant.label });
+    }
+  });
+
+  // Create the appointment with the remaining participants
   const appointment = await Appointment.create({
     title: appointmentName,
     startDate,
@@ -33,10 +51,34 @@ const createAppointment = async (req, res) => {
     startTime,
     endTime,
     description: appointmentDescription,
-    participants: appointmentParticipates,
+    participants: participantIds,
+    notRegisteredParticipants: notRegisteredParticipantIds,
     status,
     userId: req.user.userId,
   });
+
+  // Function to send email based on user existence in the system
+  for (const participant of appointmentParticipates) {
+    const user = users.find((u) => u.email === participant.label);
+    if (user) {
+      await sendMultipleEmails({
+        participant: participant,
+        userId: req.user.userId,
+        appointmentId: appointment._id,
+        subject: "Appointment Confirmation",
+        text: `You have been added to the appointment: ${appointmentName}`,
+      });
+    } else {
+      await sendMultipleEmails({
+        to: participant,
+        userId: req.user.userId,
+        appointmentId: appointment._id,
+        subject: "Join Hora",
+        text: "You are not using Hora yet, sign up to be added",
+      });
+    }
+  }
+
   res.status(StatusCodes.CREATED).json({
     appointment,
   });
@@ -74,7 +116,10 @@ const updateAppointment = async (req, res) => {
   res.status(StatusCodes.OK).json({ appointment });
 };
 const allAppointments = async (req, res) => {
-  const appointments = await Appointment.find({ userId: req.user.userId });
+  const appointments = await Appointment.find({
+    userId: req.user.userId,
+  }).populate("participants");
+
   const statusMap = appointments.reduce((r, { status }) => {
     if (!r[status]) r[status] = 1;
     else r[status]++;
@@ -170,7 +215,11 @@ const deleteAppointment = async (req, res) => {
   await appointment.deleteOne();
   res.status(StatusCodes.OK).json({ msg: `Success! Appointment removed` });
 };
-
+const deleteAllAppointments = async (req, res) => {
+  await Appointment.deleteMany({});
+  await Approvals.deleteMany({});
+  res.status(StatusCodes.OK).json({ msg: `Success! Appointment removed` });
+};
 export {
   allAppointmentsSearch,
   createAppointment,
@@ -178,4 +227,5 @@ export {
   deleteAppointment,
   allAppointments,
   userAppointments,
+  deleteAllAppointments,
 };

@@ -1,3 +1,4 @@
+import { TbReportSearch } from "react-icons/tb";
 export const links = [
   {
     id: 1,
@@ -16,5 +17,11 @@ export const links = [
     text: "settings",
     path: "/dashboard/settings",
     icon: "majesticons:settings-cog-line",
+  },
+  {
+    id: 3,
+    text: "requests",
+    path: "/dashboard/requests",
+    icon: "solar:bag-check-bold",
   },
 ];

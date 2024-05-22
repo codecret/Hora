@@ -9,8 +9,9 @@ import ResetPassword from "./pages/loginlayout/ResetPassword";
 import Error from "./pages/Error";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Settings from "./pages/Settings/Settings";
-import SearchPage from "./pages/Search/SearchPage";
 import Landing from "./pages/Landing/Landing";
+import Requests from "./pages/Requests";
+import SearchPage from "./pages/Search/SearchPage";
 import ThemeProvider from "./theme/theme";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route index element={<DashboardPage />} />
           <Route path="calendar" element={<CalendarPage />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="requests" element={<Requests />} />
         </Route>
         <Route path="appointments" element={<SearchPage />} />
 

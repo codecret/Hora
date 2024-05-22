@@ -37,7 +37,22 @@ const CalendarPage = () => {
           e.startTime
         );
         const endDateTimeCombined = combineDateAndTime(e.endDate, e.endTime);
+        const formattedParticipants = e.participants.map((participant) => ({
+          value: participant._id,
+          label: participant.email,
+        }));
 
+        const formattedNotRegisteredParticipants =
+          e.notRegisteredParticipants.map((participant) => ({
+            value: participant._id,
+            label: participant.email,
+          }));
+
+        // Combine the arrays
+        const combinedParticipants = [
+          ...formattedParticipants,
+          ...formattedNotRegisteredParticipants,
+        ];
         return {
           id: e._id,
           title: e.title,
@@ -48,7 +63,7 @@ const CalendarPage = () => {
             ? endDateTimeCombined.toDate()
             : null, // Convert to Date object
           status: e.status,
-          participants: e.participants,
+          participants: combinedParticipants,
           description: e.description,
           color: COLOR_OPTIONS[index % COLOR_OPTIONS.length],
           textColor: COLOR_OPTIONS[index % COLOR_OPTIONS.length],

@@ -64,7 +64,8 @@ const updateUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ user });
 };
 const allUsers = async (req, res) => {
-  const users = await User.find({});
+  let users = await User.find({});
+  users = users.filter((ele) => ele._id.toString() !== req.user.userId);
   res.status(StatusCodes.OK).json({ users });
 };
 const logoutUser = async (req, res) => {

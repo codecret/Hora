@@ -40,6 +40,21 @@ export function useGetAuth({ state }) {
   return query;
 }
 
+async function getAllUsersAsync() {
+  const response = await authFetch.get("/auth/allUsers");
+  const users = response.data.users;
+  return users;
+}
+
+export function useGetAllUsers() {
+  const query = useQuery({
+    queryKey: ["users"],
+    queryFn: () => getAllUsersAsync(),
+    keepPreviousData: true,
+  });
+
+  return query;
+}
 const useLoginAuthAsync = ({ email, password }) => {
   return authFetch.post("/auth/login", {
     email,

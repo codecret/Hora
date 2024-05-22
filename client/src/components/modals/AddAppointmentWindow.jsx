@@ -28,6 +28,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import i18n from "i18next";
 import "dayjs/locale/tr";
 import "dayjs/locale/en";
+import Loader from "../Loader";
+import { useGetAllUsers } from "../../hooks/useAuth";
 
 const animatedComponents = makeAnimated();
 dayjs.extend(customParseFormat);
@@ -41,6 +43,8 @@ const AddAppointmentWindow = ({
   dates,
 }) => {
   const { t } = useTranslation();
+  const { data: users, isLoading, isFetching } = useGetAllUsers();
+
   const { appointmentStatusOptions } = useAppContext();
   const [inputValue, setInputValue] = useState("");
   const [appointmentStates, setAppointmentStates] = useState({
@@ -74,11 +78,6 @@ const AddAppointmentWindow = ({
   useEffect(() => {
     const selectedAppointment = dates.find((ele) => ele.id == editedId);
     if (editedId && selectedAppointment && isModalOpen === true) {
-      const participants = selectedAppointment?.participants?.map((e) => ({
-        value: e,
-        label: e,
-      }));
-
       // Parse start and end dates
       const startDate = dayjs(selectedAppointment.start).tz(
         "Europe/Istanbul",
@@ -88,12 +87,12 @@ const AddAppointmentWindow = ({
         "Europe/Istanbul",
         true
       );
-
+      console.log(selectedAppointment);
       setAppointmentStates({
         appointmentName: selectedAppointment.title,
         appointmentDescription: selectedAppointment.description,
         status: selectedAppointment.status ?? "",
-        appointmentParticipates: participants ?? [],
+        appointmentParticipates: selectedAppointment.participants ?? [],
         startDate: startDate.isValid() ? startDate : dayjs(),
         endDate: endDate.isValid() ? endDate : dayjs(),
         startTime: startDate.isValid() ? startDate : dayjs(),
@@ -101,7 +100,9 @@ const AddAppointmentWindow = ({
       });
     }
   }, [editedId, isModalOpen]);
-
+  if (isLoading || isFetching) {
+    return <Loader />;
+  }
   const handleCreateProject = (e) => {
     e.preventDefault();
     const { appointmentName, status } = appointmentStates;
@@ -156,6 +157,7 @@ const AddAppointmentWindow = ({
         event.preventDefault();
     }
   };
+
   const handleCancleButton = () => {
     setIsModalOpen(false);
     setAppointmentStates({
@@ -169,6 +171,10 @@ const AddAppointmentWindow = ({
       endTime: dayjs(),
     });
   };
+  const transformedUsers = users.map((user) => ({
+    label: user.email,
+    value: user._id,
+  }));
   return (
     <div
       className={`overlay ${isModalOpen ? "trueWindow" : "falseWindow"}`}
@@ -258,13 +264,18 @@ const AddAppointmentWindow = ({
           inputValue={inputValue}
           isClearable
           isMulti
-          menuIsOpen={false}
-          onChange={(deletedValue) =>
+          options={transformedUsers}
+          onChange={(deletedValue) => {
+            const updatedOptions = deletedValue.map((option) => ({
+              ...option,
+              isSelected: option.isSelected ?? true,
+            }));
+
             setAppointmentStates((prevState) => ({
               ...prevState,
-              appointmentParticipates: deletedValue,
-            }))
-          }
+              appointmentParticipates: updatedOptions,
+            }));
+          }}
           onInputChange={(newValue) => setInputValue(newValue)}
           onKeyDown={handleKeyDown}
           placeholder={t("Add Participates")}
@@ -283,31 +294,33 @@ const AddAppointmentWindow = ({
           labelText={"Write a description"}
           label={"Description: "}
         />
-        <button
-          className="reset-btn createBtn animatedBtn"
-          onClick={handleCreateProject}
-        >
-          {editedId ? t("Edit Appointment") : t("Create Appointment")}
-        </button>
+        <div className="buttonContainer">
+          <button
+            className="reset-btn createBtn animatedBtn"
+            onClick={handleCreateProject}
+          >
+            {editedId ? t("Edit Appointment") : t("Create Appointment")}
+          </button>
 
-        {!editedId && (
-          <button
-            className="reset-btn createBtn animatedBtn deleteBtn"
-            onClick={handleCancleButton}
-          >
-            {t("Cancle Appointment")}
-          </button>
-        )}
-        {editedId && (
-          <button
-            className="reset-btn createBtn animatedBtn deleteBtn"
-            onClick={() => {
-              deleteAppointment({ id: editedId });
-            }}
-          >
-            {t("Delete Appointment")}
-          </button>
-        )}
+          {!editedId && (
+            <button
+              className="reset-btn createBtn animatedBtn deleteBtn"
+              onClick={handleCancleButton}
+            >
+              {t("Cancle Appointment")}
+            </button>
+          )}
+          {editedId && (
+            <button
+              className="reset-btn createBtn animatedBtn deleteBtn"
+              onClick={() => {
+                deleteAppointment({ id: editedId });
+              }}
+            >
+              {t("Delete Appointment")}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
