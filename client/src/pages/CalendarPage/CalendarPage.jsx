@@ -77,7 +77,7 @@ const CalendarPage = () => {
   }, [data?.appointments]);
 
   if (isLoading || isFetching) {
-    return <Loader />;
+    return <Loader center />;
   }
 
   return (

@@ -3,13 +3,16 @@ const Wrapper = styled.section`
   margin-top: 0.5rem;
   width: 100%;
 
+  .requestId {
+    color: var(--grey-100);
+  }
   .requestPageTitle {
     margin: 0.5rem;
     margin-top: 2rem;
   }
   .requestPageDesc {
     margin: 0.5rem !important;
-    color: var(--grey-300);
+    color: var(--grey-100);
   }
   .requestTaskProject {
     text-transform: capitalize;

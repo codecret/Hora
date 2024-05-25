@@ -1,36 +1,39 @@
+import { useTranslation } from "react-i18next";
 import Wrapper from "../assets/styles/RequestsWrapper";
 import Loader from "../components/Loader";
 import RequestItem from "../components/RequestItem";
 import { useGetApprovals } from "../hooks/useApprovals";
 
 const Requests = () => {
+  const { t } = useTranslation();
   const { data: requests, isLoading, isFetching, status } = useGetApprovals();
   if (isLoading || isFetching) {
-    return <Loader />;
+    return <Loader center />;
   }
   return (
     <Wrapper>
-      <h1 className="requestPageTitle">Requests</h1>
-      <p className="requestPageDesc">Browse your requests here.</p>
+      <h1 className="requestPageTitle">{t("Requests")}</h1>
+      <p className="requestPageDesc">{t("Browse your requests here.")}</p>
       <div className="cardsContainer">
         <div className="cardsParent">
           {status === "pending" ? (
-            <h1>Loading</h1>
+            <Loader />
           ) : status === "error" ? (
-            "Error"
+            t("Error")
           ) : requests.length > 0 ? (
             requests.map((ele, index) => {
+              console.log(ele);
               return (
                 <RequestItem
                   key={index}
                   {...ele.relatedAppointmentId}
-                  recipient={ele.recipient}
+                  creator={ele.creator.name}
                   requestId={ele._id}
                 />
               );
             })
           ) : (
-            <p>No requests found.</p>
+            <p>{t("No requests found.")}</p>
           )}
         </div>
       </div>

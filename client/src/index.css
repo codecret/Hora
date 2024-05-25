@@ -32,6 +32,18 @@ body {
   line-height: 1.75;
   color: var(--textColor);
 }
+.loading {
+  border: 5px solid var(--grey-400);
+  border-radius: 50%;
+  border-top-color: var(--primary-500);
+  animation: spinner 2s linear infinite;
+}
+.loading-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
 .form-input {
   width: 100%;
   padding: 0.375rem 0.75rem;

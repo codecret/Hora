@@ -12,7 +12,7 @@ const Layout = () => {
     isFetching,
   } = useGetAuth({ state: "protected" });
   if (isLoading || isFetching) {
-    return <Loader />;
+    return <Loader center />;
   }
   return (
     <main className="dashboard-container">

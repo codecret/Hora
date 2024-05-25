@@ -113,7 +113,6 @@ const updateAppointment = async (req, res) => {
     appointment.notRegisteredParticipants,
     appointmentParticipates
   );
-  console.log("newParticipates", newParticipates);
   for (const participant of newParticipates) {
     if (mongoose.Types.ObjectId.isValid(participant.id)) {
       await sendMultipleEmailsEdit({
@@ -223,7 +222,6 @@ const allAppointments = async (req, res) => {
 };
 const allAppointmentsSearch = async (req, res) => {
   const { appointmentSearch } = req.query;
-  console.log(appointmentSearch);
   let queryObject = { userId: req.user.userId };
   if (appointmentSearch) {
     queryObject.title = { $regex: appointmentSearch, $options: "i" };

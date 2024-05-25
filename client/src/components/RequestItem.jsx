@@ -1,9 +1,12 @@
 import dayjs from "dayjs";
 import { useApproveRequest } from "../hooks/useApprovals";
 import { IoPersonCircle } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
+import { getLastFourDigits } from "../utils/hooks";
 
-const RequestItem = ({ title, _id, recipient, createdAt, requestId }) => {
-  const firstFourDigits = requestId.slice(0, 4);
+const RequestItem = ({ title, _id, creator, createdAt, requestId }) => {
+  const { t } = useTranslation();
+  const firstFourDigits = getLastFourDigits(requestId);
   const { mutateAsync: approveRequest } = useApproveRequest();
   const handleRequestApproval = async (id, type) => {
     if (type === "reject") {
@@ -12,17 +15,20 @@ const RequestItem = ({ title, _id, recipient, createdAt, requestId }) => {
     }
     await approveRequest({ id: requestId });
   };
+
   return (
     <div className="card">
       <div>
         <div className="d-flex align-center gap-10">
           <span className="requestId">{firstFourDigits}</span>
-          <h3 className="requestTaskTitle">Title: {title || "no title"}</h3>
+          <h3 className="requestTaskTitle">
+            {t("Title")}: {title || t("no title")}
+          </h3>
           <div className="userContainerFlex">
-            {recipient?.imageUrl ? (
+            {creator?.imageUrl ? (
               <img
-                src={recipient.imageUrl}
-                alt="recipient"
+                src={creator.imageUrl}
+                alt="creator"
                 width={50}
                 height={50}
               />
@@ -30,25 +36,25 @@ const RequestItem = ({ title, _id, recipient, createdAt, requestId }) => {
               <IoPersonCircle size={40} />
             )}
             <p className="requestTaskOwner">
-              {recipient.name ? recipient.name : "no name"}
+              {creator ? creator : t("no name")}
             </p>
           </div>
         </div>
         <div className="requestCreatedAt">
-          Created At : {dayjs(createdAt).format("DD MMM ,h A")}
+          {t("Created At:")} {dayjs(createdAt).format("DD MMM, h A")}
         </div>
         <div className="requestButtonsContainer">
           <button
             className={`btn createBtn requestBtn typeedit rejectBtn`}
             onClick={() => handleRequestApproval(_id, "reject")}
           >
-            Reject
+            {t("Reject")}
           </button>
           <button
             className={`btn createBtn requestBtn typeedit`}
             onClick={() => handleRequestApproval(_id)}
           >
-            Accept
+            {t("Accept")}
           </button>
         </div>
       </div>

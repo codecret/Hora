@@ -56,3 +56,9 @@ export const combineDateAndTime = (date, time) => {
   );
   return startDateTimeCombined;
 };
+
+// regular expression to match the last four digits
+export const getLastFourDigits = (str) => {
+  const digits = str.replace(/\D/g, "");
+  return digits.slice(-4);
+};

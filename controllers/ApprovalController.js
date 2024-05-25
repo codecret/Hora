@@ -4,17 +4,14 @@ import Appointment from "../models/Appointment.js";
 import NotFoundError from "../errors/not-found.js";
 
 const getApprovalForUser = async (req, res) => {
-  console.log(req.user.userId);
   const approvals = await Approvals.find({
     recipient: req.user.userId,
-  }).populate("relatedAppointmentId recipient");
+  }).populate("relatedAppointmentId recipient creator");
   res.status(StatusCodes.OK).json({ approvals });
 };
 
 const approveRequest = async (req, res) => {
   const { id } = req.params; // this is approval id
-  console.log("request");
-  console.log(id);
   const approval = await Approvals.findOne({ _id: id })
     .populate("relatedAppointmentId")
     .select(
@@ -25,7 +22,6 @@ const approveRequest = async (req, res) => {
     throw new NotFoundError(`No approval with id.`);
   }
 
-  console.log(approval.relatedAppointmentId);
   const appointmentValues = approval.relatedAppointmentId.toObject();
   const updatedAppointment = await Appointment.create({
     title: appointmentValues.title,

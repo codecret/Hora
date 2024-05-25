@@ -21,7 +21,7 @@ const Landing = () => {
 
   const content =
     isLoading || isFetching ? (
-      <Loader />
+      <Loader center />
     ) : (
       <div>
         <Navbar handleNavigate={handleNavigate} />
