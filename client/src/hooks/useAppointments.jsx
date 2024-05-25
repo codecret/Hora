@@ -118,13 +118,12 @@ const editAppointmentAsync = ({
   //convert it to minutes to store in database
   let convertedStartTime = convert24hoursToMinutesTime(startTime);
   let convertedEndTime = convert24hoursToMinutesTime(endTime);
-  const participants = appointmentParticipates.map((ele) => ele.value);
 
   return authFetch.patch(`/appointment/${editedId}`, {
     appointmentName,
     appointmentDescription,
     status,
-    participants,
+    appointmentParticipates,
     startDate,
     endDate,
     startTime: convertedStartTime,

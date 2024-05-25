@@ -4,8 +4,12 @@ import { StatusCodes } from "http-status-codes";
 import { BadRequestError } from "../errors/index.js";
 import moment from "moment";
 import mongoose from "mongoose";
-import { sendMultipleEmails } from "../services/emailService.js";
+import {
+  sendMultipleEmails,
+  sendMultipleEmailsEdit,
+} from "../services/emailService.js";
 import Approvals from "../models/Approvals.js";
+import { findChangedParticipants } from "../utils/hooks.js";
 
 const createAppointment = async (req, res) => {
   let {
@@ -90,7 +94,7 @@ const updateAppointment = async (req, res) => {
   let {
     appointmentName,
     appointmentDescription,
-    participants,
+    appointmentParticipates,
     status,
     startDate,
     endDate,
@@ -100,11 +104,42 @@ const updateAppointment = async (req, res) => {
   if (!appointmentName) {
     throw new BadRequestError("please provide all the values");
   }
-  const appointment = await Appointment.findOne({ _id: appointmentId });
+  const appointment = await Appointment.findOne({
+    _id: appointmentId,
+  }).populate("participants notRegisteredParticipants");
+
+  const newParticipates = findChangedParticipants(
+    appointment.participants,
+    appointment.notRegisteredParticipants,
+    appointmentParticipates
+  );
+  console.log("newParticipates", newParticipates);
+  for (const participant of newParticipates) {
+    if (mongoose.Types.ObjectId.isValid(participant.id)) {
+      await sendMultipleEmailsEdit({
+        participant: participant,
+        userId: req.user.userId,
+        appointmentId: appointment._id,
+        subject: "Appointment Confirmation",
+        text: `You have been added to the appointment: ${appointmentName}`,
+      });
+    }
+  }
+
+  const participantIds = [];
+  const notRegisteredParticipantIds = [];
+  appointmentParticipates.forEach((participant) => {
+    if (mongoose.Types.ObjectId.isValid(participant.value)) {
+      participantIds.push(participant.value);
+    } else {
+      notRegisteredParticipantIds.push({ email: participant.label });
+    }
+  });
 
   appointment.title = appointmentName;
   appointment.description = appointmentDescription;
-  appointment.participants = participants;
+  appointment.participants = participantIds;
+  appointment.notRegisteredParticipants = notRegisteredParticipantIds;
   appointment.status = status;
   appointment.startDate = startDate;
   appointment.endDate = endDate;

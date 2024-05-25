@@ -71,6 +71,10 @@
 .passwordChange {
   margin-top: 0.5rem;
 }
+.change-pic-btn {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
 @media (max-width: 768px) {
   .topContainer,
   .wholeContainer {
@@ -91,6 +95,6 @@
     margin: 1rem 0rem;
   }
   .change-pic-btn {
-    font-size: 13px;
+    font-size: 12px !important;
   }
 }

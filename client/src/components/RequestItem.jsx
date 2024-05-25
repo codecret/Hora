@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { useApproveRequest } from "../hooks/useApprovals";
+import { IoPersonCircle } from "react-icons/io5";
 
 const RequestItem = ({ title, _id, recipient, createdAt, requestId }) => {
   const firstFourDigits = requestId.slice(0, 4);
@@ -16,10 +17,22 @@ const RequestItem = ({ title, _id, recipient, createdAt, requestId }) => {
       <div>
         <div className="d-flex align-center gap-10">
           <span className="requestId">{firstFourDigits}</span>
-          <h3 className="requestTaskTitle">Title:{title || "no title"}</h3>
-          <p className="requestTaskOwner">
-            {recipient ? recipient : "no name"}
-          </p>
+          <h3 className="requestTaskTitle">Title: {title || "no title"}</h3>
+          <div className="userContainerFlex">
+            {recipient?.imageUrl ? (
+              <img
+                src={recipient.imageUrl}
+                alt="recipient"
+                width={50}
+                height={50}
+              />
+            ) : (
+              <IoPersonCircle size={40} />
+            )}
+            <p className="requestTaskOwner">
+              {recipient.name ? recipient.name : "no name"}
+            </p>
+          </div>
         </div>
         <div className="requestCreatedAt">
           Created At : {dayjs(createdAt).format("DD MMM ,h A")}

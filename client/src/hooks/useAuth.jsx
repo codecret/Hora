@@ -16,6 +16,7 @@ async function getAuthAsync() {
 
 export function useGetAuth({ state }) {
   const navigate = useNavigate();
+  const logoutMutation = useLogoutUser();
   const query = useQuery({
     queryKey: ["user"],
     queryFn: () => getAuthAsync(),
@@ -29,11 +30,14 @@ export function useGetAuth({ state }) {
       }
       return;
     } else if (query.isSuccess) {
-      if (state === "login") {
+      if (query.data === null) {
+        logoutMutation.mutate();
+      } else if (state === "login") {
         setTimeout(() => {
           navigate("/dashboard");
         }, 1000);
       }
+      return;
     }
   }, [query.isError, query.isSuccess, state]);
 

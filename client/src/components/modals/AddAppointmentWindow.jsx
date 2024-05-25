@@ -31,6 +31,16 @@ import "dayjs/locale/en";
 import Loader from "../Loader";
 import { useGetAllUsers } from "../../hooks/useAuth";
 
+const initialState = {
+  appointmentName: "",
+  appointmentDescription: "",
+  status: "Scheduled",
+  appointmentParticipates: [],
+  startDate: dayjs(),
+  endDate: dayjs(),
+  startTime: dayjs(),
+  endTime: dayjs(),
+};
 const animatedComponents = makeAnimated();
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -47,16 +57,7 @@ const AddAppointmentWindow = ({
 
   const { appointmentStatusOptions } = useAppContext();
   const [inputValue, setInputValue] = useState("");
-  const [appointmentStates, setAppointmentStates] = useState({
-    appointmentName: "",
-    appointmentDescription: "",
-    status: "Scheduled",
-    appointmentParticipates: [],
-    startDate: dayjs(),
-    endDate: dayjs(),
-    startTime: dayjs(),
-    endTime: dayjs(),
-  });
+  const [appointmentStates, setAppointmentStates] = useState(initialState);
   const { mutateAsync: createAppointment } = useAddAppointment({
     setAppointmentStates,
     setIsModalOpen,
@@ -87,7 +88,6 @@ const AddAppointmentWindow = ({
         "Europe/Istanbul",
         true
       );
-      console.log(selectedAppointment);
       setAppointmentStates({
         appointmentName: selectedAppointment.title,
         appointmentDescription: selectedAppointment.description,
@@ -157,19 +157,9 @@ const AddAppointmentWindow = ({
         event.preventDefault();
     }
   };
-
   const handleCancleButton = () => {
     setIsModalOpen(false);
-    setAppointmentStates({
-      appointmentName: "",
-      appointmentDescription: "",
-      status: "Scheduled",
-      appointmentParticipates: [],
-      startDate: dayjs(),
-      endDate: dayjs(),
-      startTime: dayjs(),
-      endTime: dayjs(),
-    });
+    setAppointmentStates(initialState);
   };
   const transformedUsers = users.map((user) => ({
     label: user.email,
@@ -188,16 +178,7 @@ const AddAppointmentWindow = ({
         <IoClose
           className="closeIcon"
           onClick={() => {
-            setAppointmentStates({
-              appointmentName: "",
-              appointmentDescription: "",
-              status: "Scheduled",
-              appointmentParticipates: [],
-              startDate: dayjs(),
-              endDate: dayjs(),
-              startTime: dayjs(),
-              endTime: dayjs(),
-            });
+            setAppointmentStates(initialState);
             setIsModalOpen(false);
           }}
         />

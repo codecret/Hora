@@ -44,7 +44,9 @@ const AppointmentItem = ({
         <p className="appointment-name">
           {participants.length > 1
             ? `${participants[0]} +${participants.length - 1} ${t("others")}.`
-            : participants[0]}
+            : participants.length === 1
+            ? participants[0].name
+            : "no participates"}
         </p>
         <p className="appointment-description">{description}</p>
       </div>
