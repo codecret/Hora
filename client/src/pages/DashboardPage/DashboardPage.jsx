@@ -1,11 +1,12 @@
-import "./DashboardPage.css";
+// import "./DashboardPage.css";
 import { useGetAppointments } from "../../hooks/useAppointments";
 import Loader from "../../components/Loader";
 import { useTranslation } from "react-i18next";
 import { combineDateAndTime } from "../../utils/hooks";
-import BarChartComponent from "../../components/BarChart";
-import AppointmentsColumn from "../../components/AppointmentsColumn";
-import PieChartComponent from "../../components/PieChartComponent";
+import BarChartComponent from "./BarChartComponent";
+import AppointmentsColumn from "./AppointmentsColumn";
+import PieChartComponent from "./PieChartComponent";
+import Wrapper from "../../assets/styles/DashboardWrapper";
 
 const DashboardPage = () => {
   const { t } = useTranslation();
@@ -24,7 +25,7 @@ const DashboardPage = () => {
   const upcomingAppointments = getUpcomingAppointments(data.appointments);
 
   return (
-    <div className="two-column-div">
+    <Wrapper>
       <AppointmentsColumn upcomingAppointments={upcomingAppointments} t={t} />
       <div className="right-column">
         <div className="top-row">
@@ -34,7 +35,7 @@ const DashboardPage = () => {
           <BarChartComponent data={data} t={t} />
         </div>
       </div>
-    </div>
+    </Wrapper>
   );
 };
 

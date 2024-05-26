@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./Searchbar.css";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 

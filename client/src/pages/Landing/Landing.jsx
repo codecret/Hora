@@ -1,10 +1,10 @@
-import Hero from "../../components/Landing/Hero";
-import LandingBody from "../../components/Landing/LandingBody";
-import Navbar from "../../components/Landing/Navbar";
+import Wrapper from "../../assets/styles/Landing";
+import Hero from "./Hero";
 import Loader from "../../components/Loader";
 import { useGetAuth } from "../../hooks/useAuth";
-import "./Landing.css";
 import { useNavigate } from "react-router-dom";
+import LandingBody from "./LandingBody";
+import NavbarLanding from "./NavbarLanding";
 
 const Landing = () => {
   const { isLoading, isFetching } = useGetAuth({ state: "login" });
@@ -23,11 +23,11 @@ const Landing = () => {
     isLoading || isFetching ? (
       <Loader center />
     ) : (
-      <div>
-        <Navbar handleNavigate={handleNavigate} />
+      <Wrapper>
+        <NavbarLanding handleNavigate={handleNavigate} />
         <Hero handleNavigate={handleNavigate} />
         <LandingBody handleNavigate={handleNavigate} />
-      </div>
+      </Wrapper>
     );
 
   return content;

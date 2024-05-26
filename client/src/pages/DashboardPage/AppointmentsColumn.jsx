@@ -1,4 +1,4 @@
-import AppointmentItem from "./AppointmentItem/AppointmentItem";
+import AppointmentItem from "../../components/AppointmentItem";
 
 const AppointmentsColumn = ({ upcomingAppointments, t }) => {
   return (

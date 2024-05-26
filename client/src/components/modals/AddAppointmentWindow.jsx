@@ -5,11 +5,10 @@ import {
 } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { handleOverlayClick } from "../../utils/hooks";
-import FormRow from "../FormRow";
-import FormRowSelect from "../FormRowSelect";
+import FormRow from "../forms/FormRow";
+import FormRowSelect from "../forms/FormRowSelect";
 import { IoClose } from "react-icons/io5";
 import { useAppContext } from "../../context/appContext";
-import "./modal.css";
 import { styled } from "@mui/material";
 import dayjs from "dayjs";
 import CreatableSelect from "react-select/creatable";

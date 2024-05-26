@@ -1,8 +1,8 @@
-import "./AppointmentItem.css";
 import { Icon } from "@iconify/react";
 import dayjs from "dayjs";
-import { convertMinutesTo24hoursTime } from "../../utils/hooks";
+import { convertMinutesTo24hoursTime } from "../utils/hooks";
 import { useTranslation } from "react-i18next";
+import Wrapper from "../assets/styles/AppointmentItemWrapper";
 
 const AppointmentItem = ({
   title,
@@ -24,7 +24,7 @@ const AppointmentItem = ({
   const formattedStartDate = dayjs(emptyStartDate).format("dddd, MMM D");
 
   return (
-    <div className="appointment-card">
+    <Wrapper>
       <div className="card-leftside">
         <h2 className="appointment-title">{title}</h2>
         <div className="appointment-date">
@@ -50,7 +50,7 @@ const AppointmentItem = ({
         </p>
         <p className="appointment-description">{description}</p>
       </div>
-    </div>
+    </Wrapper>
   );
 };
 

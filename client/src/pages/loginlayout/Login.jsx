@@ -1,11 +1,11 @@
-import "./Login.css";
-import FormRow from "../../components/FormRow";
+import FormRow from "../../components/forms/FormRow";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useGetAuth, useLoginAuth, useRegisterUser } from "../../hooks/useAuth";
 import { useTranslation } from "react-i18next";
 import { IoIosArrowRoundBack } from "react-icons/io";
+import Wrapper from "../../assets/styles/LoginWrapper";
 
 const initialState = {
   name: "",
@@ -69,7 +69,7 @@ const Login = () => {
     navigate("/");
   };
   return (
-    <div className="container-full-width-height">
+    <Wrapper>
       <div>
         <Toaster position="bottom-right" reverseOrder={false} />
       </div>
@@ -148,7 +148,7 @@ const Login = () => {
         </div>
         <div className="right-container"></div>
       </div>
-    </div>
+    </Wrapper>
   );
 };
 

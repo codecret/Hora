@@ -1,11 +1,10 @@
-import Logo from "../Logo";
-import "../../pages/Landing/Landing.css";
+import Logo from "../../components/Logo";
 import { useTranslation } from "react-i18next";
-import LanguageLayout from "../LanguageLayout";
 import { useEffect, useRef, useState } from "react";
 import { handleIconClick } from "../../utils/outclick";
+import LanguageLayout from "../../components/LanguageLayout";
 
-const Navbar = ({ handleNavigate }) => {
+const NavbarLanding = ({ handleNavigate }) => {
   const { t } = useTranslation();
   const [showLanguage, setShowLanguage] = useState(false);
   const languageRef = useRef(null);
@@ -67,4 +66,4 @@ const Navbar = ({ handleNavigate }) => {
   );
 };
 
-export default Navbar;
+export default NavbarLanding;

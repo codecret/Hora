@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
-import { useApproveRequest } from "../hooks/useApprovals";
+import { useApproveRequest } from "../../hooks/useApprovals";
 import { IoPersonCircle } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
-import { getLastFourDigits } from "../utils/hooks";
+import { getLastFourDigits } from "../../utils/hooks";
 
 const RequestItem = ({ title, _id, creator, createdAt, requestId }) => {
   const { t } = useTranslation();

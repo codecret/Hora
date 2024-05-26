@@ -1,14 +1,14 @@
 import { useOutletContext } from "react-router-dom";
 import { FaCircleUser } from "react-icons/fa6";
 import Button from "../../components/Button";
-import "./Settings.css";
-import FormRow from "../../components/FormRow";
+import FormRow from "../../components/forms/FormRow";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useEditProfile } from "../../hooks/useAuth";
 import { useTranslation } from "react-i18next";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/material.css";
+import Wrapper from "../../assets/styles/SettingsWrapper";
 
 const Settings = () => {
   const { t } = useTranslation();
@@ -80,7 +80,7 @@ const Settings = () => {
     });
   };
   return (
-    <div className="sectionPadding">
+    <Wrapper>
       <form
         onSubmit={handleSubmit}
         method="post"
@@ -189,7 +189,7 @@ const Settings = () => {
           </div>
         </div>
       </form>
-    </div>
+    </Wrapper>
   );
 };
 

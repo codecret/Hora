@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import Wrapper from "../assets/styles/RequestsWrapper";
-import Loader from "../components/Loader";
-import RequestItem from "../components/RequestItem";
-import { useGetApprovals } from "../hooks/useApprovals";
+import Wrapper from "../../assets/styles/RequestsWrapper";
+import Loader from "../../components/Loader";
+import RequestItem from "./RequestItem";
+import { useGetApprovals } from "../../hooks/useApprovals";
 
 const Requests = () => {
   const { t } = useTranslation();
@@ -22,7 +22,6 @@ const Requests = () => {
             t("Error")
           ) : requests.length > 0 ? (
             requests.map((ele, index) => {
-              console.log(ele);
               return (
                 <RequestItem
                   key={index}

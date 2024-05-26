@@ -2,7 +2,7 @@ import { useState } from "react";
 import useQuery from "../../utils/useQuery";
 import toast, { Toaster } from "react-hot-toast";
 import { useResetPassword } from "../../hooks/useAuth";
-import FormRow from "../../components/FormRow";
+import FormRow from "../../components/forms/FormRow";
 import Wrapper from "../../assets/styles/ResetPassword";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";

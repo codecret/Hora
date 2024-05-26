@@ -4,7 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useForgotPassword } from "../../hooks/useAuth";
-import FormRow from "../../components/FormRow";
+import FormRow from "../../components/forms/FormRow";
 import { useTranslation } from "react-i18next";
 import mailimage from "/mailimage.png";
 

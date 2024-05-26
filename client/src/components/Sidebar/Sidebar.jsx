@@ -1,8 +1,8 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import "./Sidebar.css";
 import { Icon } from "@iconify/react";
 import { links } from "../../../../utils/links";
 import { useLogoutUser } from "../../hooks/useAuth";
+import Wrapper from "../../assets/styles/SideBarWrapper";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const Sidebar = () => {
     await logoutUser();
   };
   return (
-    <div className="sidebar">
+    <Wrapper>
       <div className="headingContainer">
         <h1
           id="heading"
@@ -46,7 +46,7 @@ const Sidebar = () => {
           <Icon icon="majesticons:logout-line" width="1.8em" height="1.8em" />
         </button>
       </div>
-    </div>
+    </Wrapper>
   );
 };
 

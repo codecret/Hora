@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useGetAppointmentsSearch } from "../../hooks/useAppointments";
-import "./SearchPage.css";
-import AppointmentItem from "../../components/AppointmentItem/AppointmentItem";
+import AppointmentItem from "../../components/AppointmentItem";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Loader from "../../components/Loader";
 import { useNavigate } from "react-router-dom";
 import { useGetAuth } from "../../hooks/useAuth";
 import { useTranslation } from "react-i18next";
+import Wrapper from "../../assets/styles/SearchPageWrapper";
 
 const SearchPage = () => {
   const { t } = useTranslation();
@@ -34,7 +34,7 @@ const SearchPage = () => {
   };
 
   return (
-    <main className="dashboard-container">
+    <Wrapper>
       <div className="sidebar-left-column">
         <Sidebar />
       </div>
@@ -60,7 +60,7 @@ const SearchPage = () => {
           )}
         </div>
       </div>
-    </main>
+    </Wrapper>
   );
 };
 
