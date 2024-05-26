@@ -16,6 +16,8 @@ import {
 import { withAuth } from "../middleware/auth.js";
 import ImgUpload from "../middleware/imgUpload.js";
 import Multer from "multer";
+import swaggerUi from "swagger-ui-express";
+import authRoutesSwagger from "../swagger/authRoutesSwagger.json" assert { type: "json" };
 
 const multer = Multer({
   storage: Multer.memoryStorage(),
@@ -36,4 +38,9 @@ router
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 
+router.use(
+  "/api-docs",
+  swaggerUi.serveFiles(authRoutesSwagger),
+  swaggerUi.setup(authRoutesSwagger)
+);
 export default router;

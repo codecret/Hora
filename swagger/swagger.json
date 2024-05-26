@@ -1,0 +1,1084 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Combined API",
+    "version": "1.0.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "token"
+      }
+    },
+    "schemas": {
+      "Appointment": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startTime": {
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "participants": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notRegisteredParticipants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                }
+              }
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": ["Scheduled", "Canceled", "Completed"]
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "required": ["title", "description"]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 3
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "photoUrl": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "email", "password"]
+      },
+      "Approval": {
+        "type": "object",
+        "properties": {
+          "approvalId": {
+            "type": "string",
+            "description": "ID of the approval"
+          },
+          "requestId": {
+            "type": "string",
+            "description": "ID of the request associated with the approval"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["Pending", "Approved", "Rejected"],
+            "description": "Status of the approval"
+          }
+        },
+        "required": ["approvalId", "requestId", "status"]
+      },
+      "Token": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Token value"
+          },
+          "user": {
+            "type": "string",
+            "description": "User ID associated with the token"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["refresh", "reset_password", "verify_email"],
+            "description": "Type of token"
+          },
+          "expires": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Expiration date of the token"
+          },
+          "blacklisted": {
+            "type": "boolean",
+            "default": false,
+            "description": "Flag indicating whether the token is blacklisted"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp indicating when the token was created"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp indicating when the token was last updated"
+          }
+        },
+        "required": ["token", "user", "type", "expires"],
+        "example": {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+          "user": "6157b6a2b5e67d6d7861a761",
+          "type": "reset_password",
+          "expires": "2024-12-31T23:59:59.999Z",
+          "blacklisted": false,
+          "createdAt": "2024-05-26T12:00:00.000Z",
+          "updatedAt": "2024-05-26T12:00:00.000Z"
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "cookieAuth": []
+    }
+  ],
+  "paths": {
+    "/api/v1/auth/createUser": {
+      "post": {
+        "summary": "Create a new user",
+        "description": "Endpoint to create a new user.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": ["name", "email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "summary": "User login",
+        "description": "Authenticate user and return a JWT token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "User's email address"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "User's password"
+                  }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "token": {
+                      "type": "string",
+                      "description": "JWT token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/allUsers": {
+      "get": {
+        "summary": "Get all users",
+        "description": "Retrieve all users excluding the current user.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "get": {
+        "summary": "Logout user",
+        "description": "Log out the current user.",
+        "responses": {
+          "200": {
+            "description": "User logged out successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "User logged out!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/{id}": {
+      "delete": {
+        "summary": "Delete user",
+        "description": "Delete a user by ID.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The ID of the user to delete."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "Success! User removed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update user",
+        "description": "Update a user by ID.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The ID of the user to update."
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/getCurrentUser": {
+      "get": {
+        "summary": "Get current user",
+        "description": "Retrieve the current authenticated user.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/editProfile": {
+      "post": {
+        "summary": "Edit user profile",
+        "description": "Edit the current user's profile.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "editProfileInputs": {
+                    "type": "string",
+                    "description": "JSON string of profile inputs"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile edited successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/forgot-password": {
+      "post": {
+        "summary": "Forgot password",
+        "description": "Send a password reset email to the user.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "User's email address"
+                  }
+                },
+                "required": ["email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Password reset email sent"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/reset-password": {
+      "post": {
+        "summary": "Reset password",
+        "description": "Reset the user's password.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": ["token", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Password reset successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/v1/appointment": {
+      "post": {
+        "tags": ["Appointment"],
+        "summary": "Create a new appointment",
+        "description": "Endpoint to create a new appointment.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appointmentName": {
+                    "type": "string",
+                    "description": "Name of the appointment"
+                  },
+                  "appointmentDescription": {
+                    "type": "string",
+                    "description": "Description of the appointment"
+                  },
+                  "appointmentParticipates": {
+                    "type": "array",
+                    "description": "Array of participants",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "label": { "type": "string" },
+                        "value": { "type": "string" }
+                      }
+                    }
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "Status of the appointment"
+                  },
+                  "startDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Start date of the appointment"
+                  },
+                  "endDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "End date of the appointment"
+                  },
+                  "startTime": {
+                    "type": "string",
+                    "format": "time",
+                    "description": "Start time of the appointment"
+                  },
+                  "endTime": {
+                    "type": "string",
+                    "format": "time",
+                    "description": "End time of the appointment"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Appointment created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "appointment": {
+                      "type": "object",
+                      "description": "Created appointment object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Appointment"],
+        "summary": "Get all appointments",
+        "description": "Endpoint to retrieve all appointments.",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "appointments": {
+                      "type": "array",
+                      "description": "List of appointments"
+                    },
+                    "statusMap": {
+                      "type": "object",
+                      "description": "Map of appointment statuses"
+                    },
+                    "appointmentCountsByDay": {
+                      "type": "array",
+                      "description": "Appointment counts by day"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Appointment"],
+        "summary": "Delete all appointments",
+        "description": "Endpoint to delete all appointments.",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "description": "Success message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/appointment/search": {
+      "get": {
+        "tags": ["Appointment"],
+        "summary": "Search appointments",
+        "description": "Endpoint to search appointments.",
+        "parameters": [
+          {
+            "name": "appointmentSearch",
+            "in": "query",
+            "description": "Search query string",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "appointments": {
+                      "type": "array",
+                      "description": "List of appointments"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/appointment/{id}": {
+      "delete": {
+        "tags": ["Appointment"],
+        "summary": "Delete an appointment",
+        "description": "Endpoint to delete an appointment by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the appointment to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "description": "Success message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Appointment"],
+        "summary": "Update an appointment",
+        "description": "Endpoint to update an appointment by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the appointment to update",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appointmentName": {
+                    "type": "string",
+                    "description": "Name of the appointment"
+                  },
+                  "appointmentDescription": {
+                    "type": "string",
+                    "description": "Description of the appointment"
+                  },
+                  "appointmentParticipates": {
+                    "type": "array",
+                    "description": "Array of participants",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "label": { "type": "string" },
+                        "value": { "type": "string" }
+                      }
+                    }
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "Status of the appointment"
+                  },
+                  "startDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Start date of the appointment"
+                  },
+                  "endDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "End date of the appointment"
+                  },
+                  "startTime": {
+                    "type": "string",
+                    "format": "time",
+                    "description": "Start time of the appointment"
+                  },
+                  "endTime": {
+                    "type": "string",
+                    "format": "time",
+                    "description": "End timetime of the appointment"
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "appointment": {
+                        "type": "object",
+                        "description": "Updated appointment object"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Unexpected error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/approvals": {
+      "get": {
+        "tags": ["Approval"],
+        "summary": "Get approvals for the current user",
+        "description": "Retrieve approvals for the currently authenticated user.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of approvals",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "approvals": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Approval"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Approval"],
+        "summary": "Create a new approval",
+        "description": "Create a new approval for a request.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Approval"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Approval created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "approval": {
+                      "$ref": "#/components/schemas/Approval"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/api/v1/approvals/{id}": {
+      "delete": {
+        "tags": ["Approval"],
+        "summary": "Delete an approval",
+        "description": "Delete an approval by ID.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the approval to delete."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Approval deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Approval not found"
+          }
+        }
+      }
+    }
+  }
+}

@@ -14,10 +14,7 @@ const approveRequest = async (req, res) => {
   const { id } = req.params; // this is approval id
   const approval = await Approvals.findOne({ _id: id })
     .populate("relatedAppointmentId")
-    .select(
-      // first find approval request
-      "-createdAt -updatedAt -__v -_id"
-    );
+    .select("-createdAt -updatedAt -__v -_id");
   if (!approval) {
     throw new NotFoundError(`No approval with id.`);
   }

@@ -1,0 +1,444 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Appointments API",
+    "version": "1.0.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "token"
+      }
+    },
+    "schemas": {
+      "Appointment": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startTime": {
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "participants": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notRegisteredParticipants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                }
+              }
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": ["Scheduled", "Canceled", "Completed"]
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "required": ["title", "description"]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "cookieAuth": []
+    }
+  ],
+  "paths": {
+    "/api/v1/appointment": {
+      "post": {
+        "tags": ["Appointment"],
+        "summary": "Create a new appointment",
+        "description": "Endpoint to create a new appointment.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appointmentName": {
+                    "type": "string",
+                    "description": "Name of the appointment"
+                  },
+                  "appointmentDescription": {
+                    "type": "string",
+                    "description": "Description of the appointment"
+                  },
+                  "appointmentParticipates": {
+                    "type": "array",
+                    "description": "Array of participants",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "label": { "type": "string" },
+                        "value": { "type": "string" }
+                      }
+                    }
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "Status of the appointment"
+                  },
+                  "startDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Start date of the appointment"
+                  },
+                  "endDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "End date of the appointment"
+                  },
+                  "startTime": {
+                    "type": "string",
+                    "format": "time",
+                    "description": "Start time of the appointment"
+                  },
+                  "endTime": {
+                    "type": "string",
+                    "format": "time",
+                    "description": "End time of the appointment"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Appointment created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "appointment": {
+                      "type": "object",
+                      "description": "Created appointment object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Appointment"],
+        "summary": "Get all appointments",
+        "description": "Endpoint to retrieve all appointments.",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "appointments": {
+                      "type": "array",
+                      "description": "List of appointments"
+                    },
+                    "statusMap": {
+                      "type": "object",
+                      "description": "Map of appointment statuses"
+                    },
+                    "appointmentCountsByDay": {
+                      "type": "array",
+                      "description": "Appointment counts by day"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Appointment"],
+        "summary": "Delete all appointments",
+        "description": "Endpoint to delete all appointments.",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "description": "Success message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/appointment/search": {
+      "get": {
+        "tags": ["Appointment"],
+        "summary": "Search appointments",
+        "description": "Endpoint to search appointments.",
+        "parameters": [
+          {
+            "name": "appointmentSearch",
+            "in": "query",
+            "description": "Search query string",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "appointments": {
+                      "type": "array",
+                      "description": "List of appointments"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/appointment/{id}": {
+      "delete": {
+        "tags": ["Appointment"],
+        "summary": "Delete an appointment",
+        "description": "Endpoint to delete an appointment by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the appointment to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "description": "Success message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Appointment"],
+        "summary": "Update an appointment",
+        "description": "Endpoint to update an appointment by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the appointment to update",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appointmentName": {
+                    "type": "string",
+                    "description": "Name of the appointment"
+                  },
+                  "appointmentDescription": {
+                    "type": "string",
+                    "description": "Description of the appointment"
+                  },
+                  "appointmentParticipates": {
+                    "type": "array",
+                    "description": "Array of participants",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "label": { "type": "string" },
+                        "value": { "type": "string" }
+                      }
+                    }
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "Status of the appointment"
+                  },
+                  "startDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Start date of the appointment"
+                  },
+                  "endDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "End date of the appointment"
+                  },
+                  "startTime": {
+                    "type": "string",
+                    "format": "time",
+                    "description": "Start time of the appointment"
+                  },
+                  "endTime": {
+                    "type": "string",
+                    "format": "time",
+                    "description": "End timetime of the appointment"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "appointment": {
+                      "type": "object",
+                      "description": "Updated appointment object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

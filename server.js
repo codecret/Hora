@@ -21,6 +21,7 @@ import cors from "cors";
 import { extractAuth, withAuth } from "./middleware/auth.js";
 import errorHandlerMiddleware from "./middleware/error.handler.js";
 import notFoundMiddleware from "./middleware/not-found.js";
+import setupSwagger from "./swagger.js";
 
 // Create HTTP server
 const server = createServer(app);
@@ -47,6 +48,7 @@ app.use(express.static(path.resolve(__dirname, "./client/dist")));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/appointment", withAuth, appointmentRouter);
 app.use("/api/v1/approvals", withAuth, approvalRouter);
+setupSwagger(app);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
