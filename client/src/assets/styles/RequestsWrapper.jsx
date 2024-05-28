@@ -37,6 +37,7 @@ const Wrapper = styled.section`
     border-radius: 20px;
     margin-bottom: 1rem;
     box-shadow: rgba(0, 0, 0, 0.06) -2px -3px 20px 3px;
+    overflow: hidden;
   }
   .requestButtonsContainer {
     display: flex;
@@ -68,6 +69,14 @@ const Wrapper = styled.section`
     display: flex;
     gap: 10px;
     align-items: center;
+  }
+  .requestTime {
+    display: flex;
+    align-items: center;
+  }
+  .descriptionRequest {
+    margin: 1rem 0rem;
+    color: var(--grey-100);
   }
   @media (max-width: 768px) {
     .requestButtonsContainer {

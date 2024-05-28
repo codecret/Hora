@@ -1,6 +1,5 @@
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import { Route, Routes } from "react-router-dom";
-import "./App.css";
 import CalendarPage from "./pages/CalendarPage/CalendarPage";
 import Layout from "./pages/Layout";
 import Login from "./pages/loginlayout/Login";

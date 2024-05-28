@@ -68,7 +68,7 @@ export const sendMultipleEmailsEdit = async ({
       text: text,
     });
     await approvalService.createApproval({
-      recipient: participant.value,
+      recipient: participant.id,
       creator: userId,
       relatedAppointmentId: appointmentId,
     });

@@ -53,7 +53,7 @@ const Wrapper = styled.section`
   }
 
   .landing-hero-header {
-    font-size: 3rrem;
+    font-size: 2.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
