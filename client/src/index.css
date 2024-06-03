@@ -158,6 +158,7 @@ body {
   z-index: 99;
 }
 .lang-icon {
+  display: flex;
   cursor: pointer;
 }
 .lang-btn {
@@ -318,6 +319,19 @@ p {
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.699);
   transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: all 500ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
 }
 .trueWindow {
   opacity: 1;

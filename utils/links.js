@@ -21,6 +21,6 @@ export const links = [
     id: 3,
     text: "requests",
     path: "/dashboard/requests",
-    icon: "solar:bag-check-bold",
+    icon: "material-symbols:inbox",
   },
 ];

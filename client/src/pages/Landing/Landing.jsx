@@ -7,7 +7,7 @@ import LandingBody from "./LandingBody";
 import NavbarLanding from "./NavbarLanding";
 
 const Landing = () => {
-  const { isLoading, isFetching } = useGetAuth({ state: "login" });
+  const { isLoading, isFetching, isSuccess } = useGetAuth({ state: "login" });
   const navigate = useNavigate();
 
   const handleNavigate = (event, field) => {
@@ -20,7 +20,7 @@ const Landing = () => {
   };
 
   const content =
-    isLoading || isFetching ? (
+    isLoading || isFetching || !isSuccess ? (
       <Loader center />
     ) : (
       <Wrapper>

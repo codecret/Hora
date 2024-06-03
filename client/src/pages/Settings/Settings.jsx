@@ -20,6 +20,7 @@ const Settings = () => {
     password: "",
     confirmPassword: "",
     phoneNumber: "",
+    removeProfilePicture: false,
   });
   const { mutateAsync: editProfile } = useEditProfile();
   useEffect(() => {
@@ -35,6 +36,10 @@ const Settings = () => {
   const handleRemove = (event) => {
     event.preventDefault();
     setFile(null);
+    setEditProfileInputs({
+      ...editProfileInputs,
+      removeProfilePicture: true, //to diffrentiate between removed and when not sending at all
+    });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,6 +70,10 @@ const Settings = () => {
       data: e.target.files[0],
     };
     setFile(img);
+    setEditProfileInputs({
+      ...editProfileInputs,
+      removeProfilePicture: false,
+    });
   };
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -11,6 +11,7 @@ const AppointmentItem = ({
   endTime,
   participants,
   description,
+  notRegisteredParticipants,
 }) => {
   const { t, i18n } = useTranslation();
   if (i18n.language === "tr") {
@@ -22,7 +23,7 @@ const AppointmentItem = ({
     : "";
   const emptyEndTime = endTime ? convertMinutesTo24hoursTime(endTime) : "";
   const formattedStartDate = dayjs(emptyStartDate).format("dddd, MMM D");
-
+  const combinedParticipates = [...notRegisteredParticipants, ...participants];
   return (
     <Wrapper>
       <div className="card-leftside">
@@ -42,10 +43,12 @@ const AppointmentItem = ({
       </div>
       <div className="card-rightside">
         <p className="appointment-name">
-          {participants.length > 1
-            ? `${participants[0]} +${participants.length - 1} ${t("others")}.`
-            : participants.length === 1
-            ? participants[0].name
+          {combinedParticipates.length > 1
+            ? `${
+                combinedParticipates[0].name ?? combinedParticipates[0].email
+              } +${combinedParticipates.length - 1} ${t("others")}.`
+            : combinedParticipates.length === 1
+            ? combinedParticipates[0].name
             : "no participates"}
         </p>
         <p className="appointment-description">{description}</p>

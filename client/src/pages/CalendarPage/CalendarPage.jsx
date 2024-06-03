@@ -1,7 +1,6 @@
 import dayGridPlugin from "@fullcalendar/daygrid";
 import "./CalendarPage.css";
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import AddAppointmentWindow from "../../components/modals/AddAppointmentWindow";
 import { useGetAppointments } from "../../hooks/useAppointments";
 import Loader from "../../components/Loader";
@@ -40,12 +39,14 @@ const CalendarPage = () => {
         const formattedParticipants = e.participants.map((participant) => ({
           value: participant._id,
           label: participant.email,
+          notRegisteredParticipants: false,
         }));
 
         const formattedNotRegisteredParticipants =
           e.notRegisteredParticipants.map((participant) => ({
             value: participant._id,
             label: participant.email,
+            notRegisteredParticipants: true,
           }));
 
         // Combine the arrays
@@ -82,15 +83,12 @@ const CalendarPage = () => {
 
   return (
     <div className="calendarContainer">
-      {createPortal(
-        <AddAppointmentWindow
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-          editedId={editedId}
-          dates={filteredDate}
-        />,
-        document.body
-      )}
+      <AddAppointmentWindow
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        editedId={editedId}
+        dates={filteredDate}
+      />
       <div className="header">
         <p>{t("Make Appointment")}</p>
         <button

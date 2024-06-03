@@ -111,7 +111,11 @@ const editProfile = async (req, res) => {
   if (email) user.email = email;
   if (phoneNumber) user.phoneNumber = phoneNumber;
   if (password) user.password = password;
-  user.photoUrl = photoUrl;
+  if (photoUrl !== null) {
+    user.photoUrl = photoUrl;
+  } else if (editProfileInputs.removeProfilePicture) {
+    user.photoUrl = null; // or set to a default placeholder image URL
+  }
   user = await user.save();
 
   user.password = undefined;

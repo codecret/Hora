@@ -30,6 +30,13 @@ const Wrapper = styled.section`
     position: relative;
     border-radius: 50px;
   }
+  .loginBtn {
+    background-color: #589dfb;
+    width: 100%;
+    padding: 0.7rem 0.4rem;
+    font-weight: 800;
+    color: white;
+  }
   .sub-title {
     color: #656565;
   }
@@ -39,6 +46,28 @@ const Wrapper = styled.section`
   .imagesentcontainer {
     width: 100%;
     height: 80vh;
+  }
+  .login-container {
+    width: 90%;
+    height: 80vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 100%;
+    background-color: white;
+    border-radius: 10px;
+    outline: none;
+    border-radius: 50px;
+  }
+  .left-container {
+    padding: 3rem 6rem;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    border-radius: 50px;
+    text-align: left;
+    overflow: auto;
   }
   .imagecontainercontent {
     display: flex;

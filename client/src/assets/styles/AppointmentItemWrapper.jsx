@@ -8,6 +8,7 @@ const Wrapper = styled.section`
   -ms-border-radius: 10px;
   -o-border-radius: 10px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
 
   .card-leftside {
     float: left;

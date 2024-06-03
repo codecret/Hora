@@ -25,7 +25,11 @@ const Wrapper = styled.main`
     background-color: transparent;
     margin-top: 20px !important;
     padding: 0rem;
-    height: calc(100vh - 120px);
+    max-height: calc(100vh - 120px);
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
   .topColumns {
     margin-top: 2rem;

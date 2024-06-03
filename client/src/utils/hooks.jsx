@@ -2,11 +2,6 @@ import dayjs from "dayjs";
 import { useEffect } from "react";
 import { useState } from "react";
 
-export const handleOverlayClick = (e, setIsModalOpen) => {
-  if (e.target.classList.contains("overlay")) {
-    setIsModalOpen(false);
-  }
-};
 export const convertMinutesTo24hoursTime = (totalMinutes) => {
   // Convert minutes to 24 hours
   const hours = Math.floor(totalMinutes / 60);

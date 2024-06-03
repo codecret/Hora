@@ -101,9 +101,17 @@ const updateAppointment = async (req, res) => {
     startTime,
     endTime,
   } = req.body;
+
   if (!appointmentName) {
     throw new BadRequestError("please provide all the values");
   }
+  const newNotRegisteredParticipates = appointmentParticipates.filter(
+    (ele) => ele.notRegisteredParticipants === true
+  );
+  const notRegisteredParticipantIds1 = [];
+  newNotRegisteredParticipates.forEach((participant) => {
+    notRegisteredParticipantIds1.push({ email: participant.label });
+  });
   const appointment = await Appointment.findOne({
     _id: appointmentId,
   }).populate("participants notRegisteredParticipants");
@@ -138,7 +146,7 @@ const updateAppointment = async (req, res) => {
   appointment.title = appointmentName;
   appointment.description = appointmentDescription;
   appointment.participants = participantIds;
-  appointment.notRegisteredParticipants = notRegisteredParticipantIds;
+  appointment.notRegisteredParticipants = notRegisteredParticipantIds1;
   appointment.status = status;
   appointment.startDate = startDate;
   appointment.endDate = endDate;
@@ -229,7 +237,9 @@ const allAppointmentsSearch = async (req, res) => {
   // if (appointmentSearchStatus !== "all" && appointmentSearchStatus) {
   //   queryObject.status = appointmentSearchStatus;
   // }
-  const appointments = await Appointment.find(queryObject);
+  const appointments = await Appointment.find(queryObject).populate(
+    "participants"
+  );
   res.status(StatusCodes.OK).json({ appointments });
 };
 const userAppointments = async (req, res) => {
