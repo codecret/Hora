@@ -17,7 +17,6 @@ function App() {
   return (
     <ThemeProvider>
       <Routes>
-        <Route index path="/" element={<Landing />} />
         <Route
           path="dashboard"
           element={
@@ -31,6 +30,7 @@ function App() {
           <Route path="settings" element={<Settings />} />
           <Route path="requests" element={<Requests />} />
         </Route>
+        <Route index path="/" element={<Landing />} />
         <Route path="appointments" element={<SearchPage />} />
 
         <Route path="/login" element={<Login />} />
