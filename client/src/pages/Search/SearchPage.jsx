@@ -43,6 +43,7 @@ const SearchPage = () => {
           type="text"
           ref={inputRef}
           value={search}
+          placeholder="Search by name"
           onChange={handleInputChange}
           className="searchAppointment borderedDiv"
         />

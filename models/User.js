@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      // minlength:6,
+      minlength: 6,
       select: false,
     },
     phoneNumber: {

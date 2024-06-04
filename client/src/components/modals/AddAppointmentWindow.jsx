@@ -158,7 +158,6 @@ const AddAppointmentWindow = ({
         event.preventDefault();
     }
   };
-  console.log(appointmentStates.appointmentParticipates);
   const handleCancleButton = () => {
     setIsModalOpen(false);
     setAppointmentStates(initialState);

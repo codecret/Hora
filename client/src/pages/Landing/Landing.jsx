@@ -18,7 +18,6 @@ const Landing = () => {
       navigate("/login", { state: { isMember: false } });
     }
   };
-  // console.log;
 
   const content =
     isLoading || isFetching || isSuccess ? (

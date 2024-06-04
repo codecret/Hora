@@ -309,6 +309,10 @@ p {
   align-items: center;
   justify-content: center;
 }
+.fc-toolbar-chunk {
+  display: flex;
+  align-items: center;
+}
 /* overlay */
 .overlay {
   z-index: 999;
@@ -456,11 +460,23 @@ p {
   flex-direction: row;
 }
 /* calendar */
-.fc-button-group {
+/* .fc-button-group {
   margin-bottom: 1rem;
-}
+} */
 
 @media (max-width: 768px) {
+  .fc-header-toolbar .fc-toolbar .fc-toolbar-ltr {
+    display: flex;
+  }
+  .fc .fc-toolbar {
+    flex-direction: column;
+  }
+  .fc-toolbar-chunk {
+    margin: 0.4rem 0rem;
+  }
+  .fc-toolbar-title {
+    display: none;
+  }
   .addMemberWindow {
     width: 90% !important;
   }
