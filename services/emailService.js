@@ -17,7 +17,7 @@ export const transporter = nodemailer.createTransport({
 
 export const sendResetPasswordEmail = async (to, token) => {
   const subject = "Reset password";
-  const resetPasswordUrl = `http://localhost:5173/reset-password?token=${token.token}`;
+  const resetPasswordUrl = `https://hora-goy3.onrender.com/reset-password?token=${token.token}`;
   const text = `Dear user,
     To reset your password, click on this link: ${resetPasswordUrl}
     If you did not request any password resets, then ignore this email.`;
