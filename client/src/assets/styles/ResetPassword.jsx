@@ -14,6 +14,46 @@ const Wrapper = styled.section`
     background-color: #ffffff;
     border-radius: 20px;
   }
+  .left-container {
+    padding: 3rem 6rem;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    border-radius: 50px;
+    text-align: left;
+    overflow: auto;
+  }
+  .login-input {
+    border: none;
+    margin: 0.3rem 0rem;
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+    width: 100%;
+    border: 1px solid #cbd5e1;
+  }
+  .inputDiv {
+    width: 100%;
+  }
+  .loginBtn {
+    background-color: #589dfb;
+    width: 100%;
+    padding: 0.7rem 0.4rem;
+    font-weight: 800;
+    color: white;
+  }
+  .login-container {
+    width: 90%;
+    height: 80vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 100%;
+    background-color: white;
+    border-radius: 10px;
+    outline: none;
+    border-radius: 50px;
+  }
   .right-container-forget-password {
     padding: 7rem;
     position: relative;
