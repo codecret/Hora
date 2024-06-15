@@ -48,6 +48,15 @@ const Login = () => {
     e.preventDefault();
     const { name, email, password, isMember } = values;
 
+    if (email) {
+      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const isValidEmail = emailPattern.test(email);
+      if (!isValidEmail) {
+        toast.error("Invalid email address.");
+        setLoading(false);
+        return;
+      }
+    }
     if (isMember) {
       if (!email || !password) {
         toast.error("Invalid Values", "danger");

@@ -103,7 +103,7 @@ const AddAppointmentWindow = ({
   if (isLoading || isFetching) {
     return <Loader />;
   }
-  const handleCreateProject = (e) => {
+  const handleCreateAppointment = (e) => {
     e.preventDefault();
     const { appointmentName, status } = appointmentStates;
     if (!appointmentName || !status) {
@@ -297,7 +297,7 @@ const AddAppointmentWindow = ({
       <div className="buttonContainer">
         <button
           className="reset-btn createBtn animatedBtn"
-          onClick={handleCreateProject}
+          onClick={handleCreateAppointment}
         >
           {editedId ? t("Edit Appointment") : t("Create Appointment")}
         </button>

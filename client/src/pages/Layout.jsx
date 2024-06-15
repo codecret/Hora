@@ -11,7 +11,7 @@ const Layout = () => {
     isLoading,
     isFetching,
   } = useGetAuth({ state: "protected" });
-  if (isLoading || isFetching) {
+  if (isLoading) {
     return <Loader center />;
   }
   return (
