@@ -315,6 +315,7 @@ const AddAppointmentWindow = ({
             className="reset-btn createBtn animatedBtn deleteBtn"
             onClick={() => {
               deleteAppointment({ id: editedId });
+              setIsModalOpen(false);
             }}
           >
             {t("Delete Appointment")}
