@@ -36,7 +36,7 @@ app.use(express.json());
 // app.use(mongoSanitize()); // PRODUCTION
 
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: "*",
   credentials: true,
   optionSuccessStatus: 200,
 };
@@ -49,6 +49,11 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/appointment", withAuth, appointmentRouter);
 app.use("/api/v1/approvals", withAuth, approvalRouter);
 setupSwagger(app);
+
+app.get("*", (req, res) => {
+  // server side redirect to login if not logged in and trying to access protected route :)
+  res.sendFile(path.resolve(__dirname, "./client/dist", "index.html"));
+});
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
