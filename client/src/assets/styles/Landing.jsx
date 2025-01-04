@@ -46,6 +46,7 @@ const Wrapper = styled.section`
     background-position: center center;
   }
   .landing-hero-content {
+    padding: 0px;
     font-size: 14px;
     position: relative;
     margin: auto;
@@ -248,8 +249,22 @@ const Wrapper = styled.section`
     :root {
       font-size: 10px;
     }
+    .landing-b-header {
+      text-align: center;
+      padding: 0rem 2rem;
+      font-size: 1.7rem;
+    }
+    .landing-hero-header {
+      font-size: 1.7rem;
+    }
+    .landing-body {
+      text-align: center;
+    }
     .landing-hero-body {
       min-height: 40vh;
+    }
+    .landing-hero-content {
+      padding: 20px;
     }
     .bottomLeftImgHero,
     .topRightImgHero,
@@ -272,6 +287,8 @@ const Wrapper = styled.section`
       display: none;
     }
     .backgroundlanding {
+      margin-top: 2rem;
+      height: fit-content;
       width: 100%;
       overflow: hidden;
     }

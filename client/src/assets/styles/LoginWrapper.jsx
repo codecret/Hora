@@ -123,6 +123,9 @@ const Wrapper = styled.section`
     .login-container {
       grid-template-columns: 1fr;
     }
+    .left-container {
+      padding: 0rem 2rem;
+    }
     .right-container {
       display: none;
     }

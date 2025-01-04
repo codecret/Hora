@@ -83,6 +83,7 @@ const Wrapper = styled.section`
     font-weight: 500 !important;
   }
   @media (max-width: 768px) {
+    padding: 2rem 1rem;
     .topContainer,
     .wholeContainer {
       flex-direction: column;

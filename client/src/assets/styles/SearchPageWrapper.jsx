@@ -30,6 +30,9 @@ const Wrapper = styled.main`
   .topColumns {
     margin-top: 2rem;
   }
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export default Wrapper;

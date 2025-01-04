@@ -26,7 +26,7 @@ const SearchPage = () => {
       setSearch(querySearchTerm);
     }
   }, [location]);
-  if (isLoading || isFetching) return <Loader />;
+  if (isLoading || isFetching) return <Loader center />;
 
   const handleInputChange = (e) => {
     setSearch(e.target.value);

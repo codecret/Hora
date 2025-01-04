@@ -41,6 +41,7 @@ body {
 .loading-center {
   position: absolute;
   top: 50%;
+  transform: translateX(-50%);
   left: 50%;
 }
 
@@ -447,6 +448,20 @@ p {
 }
 
 @media (max-width: 768px) {
+  .fc-header-toolbar {
+    display: flex;
+    flex-direction: column;
+  }
+  .fc-button-group {
+    margin-bottom: 0rem;
+  }
+  .fc-toolbar-chunk:not(:first-child) {
+    margin-top: 1rem;
+  }
+  .header {
+    margin: 2rem 0rem;
+  }
+
   .addMemberWindow {
     width: 90% !important;
   }

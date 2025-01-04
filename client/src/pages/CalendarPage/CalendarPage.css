@@ -5,3 +5,9 @@
   height: fit-content;
   padding: 0.5rem 2rem !important;
 }
+
+@media (max-width: 768px) {
+  .calendarContainer {
+    margin-bottom: 7rem;
+  }
+}

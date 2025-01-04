@@ -138,6 +138,7 @@ const Wrapper = styled.section`
     grid-column-gap: 20px;
     grid-row-gap: 0p;
     margin-top: 20px;
+    margin-bottom: 7rem;
 
     .dashboard-container {
       grid-template-columns: 1fr;
@@ -166,6 +167,16 @@ const Wrapper = styled.section`
     .appointment-list {
       padding: 1rem 1rem;
       height: fit-content;
+    }
+    .appointment-list,
+    .bottom-row {
+      min-height: 15rem;
+    }
+    .top-row {
+      height: 100%;
+    }
+    .bottom-row {
+      height: 100%;
     }
   }
   @media (max-width: 768px) {
