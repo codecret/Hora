@@ -4,7 +4,17 @@ import macrosPlugin from "vite-plugin-babel-macros";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), macrosPlugin()],
+  plugins: [
+    react({
+      include: /\.(jsx|tsx)$/,
+      babel: {
+        plugins: ["styled-components"],
+        babelrc: false,
+        configFile: false,
+      },
+    }),
+    macrosPlugin(),
+  ],
   server: {
     proxy: {
       "/api": {
