@@ -24,6 +24,9 @@ export default defineConfig({
       },
     },
   },
+  define: {
+    SC_DISABLE_SPEEDY: "true", // needed to enable vendor prefixing using 'vite build'
+  },
   module: {
     rules: [
       {
