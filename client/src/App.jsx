@@ -11,11 +11,11 @@ import Settings from "./pages/Settings/Settings";
 import Landing from "./pages/Landing/Landing";
 import Requests from "./pages/Requests/Requests";
 import SearchPage from "./pages/Search/SearchPage";
-import ThemeProvider from "./theme/theme";
+import { ThemeProvider } from "styled-components";
 
 function App() {
   return (
-    <ThemeProvider>
+    <ThemeProvider theme={{}}>
       <Routes>
         <Route index path="/" element={<Landing />} />
         <Route

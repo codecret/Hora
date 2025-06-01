@@ -1,4 +1,7 @@
 import express from "express";
+import { readFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 const router = express.Router();
 
 import {
@@ -11,7 +14,14 @@ import {
   deleteAllAppointments,
 } from "../controllers/appointmentController.js";
 import swaggerUi from "swagger-ui-express";
-import appointmentRoutesSwagger from "../swagger/appointmentRoutesSwagger.json" assert { type: "json" };
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const appointmentRoutesSwagger = JSON.parse(
+  readFileSync(
+    join(__dirname, "../swagger/appointmentRoutesSwagger.json"),
+    "utf8"
+  )
+);
 
 router
   .route("/")

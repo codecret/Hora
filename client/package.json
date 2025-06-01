@@ -28,6 +28,7 @@
     "@tanstack/react-router": "^1.31.15",
     "@vitejs/plugin-react-refresh": "^1.3.6",
     "axios": "^1.6.8",
+    "babel-plugin-styled-components": "^1.13.3",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "dayjs": "^1.11.11",
@@ -46,7 +47,8 @@
     "react-select": "^5.8.0",
     "react-spinners": "^0.13.8",
     "recharts": "^2.12.6",
-    "styled-components": "^6.1.11"
+    "styled-components": "^6.1.11",
+    "vite-plugin-babel-macros": "^1.0.6"
   },
   "devDependencies": {
     "@iconify/react": "^4.1.1",

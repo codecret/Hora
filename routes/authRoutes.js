@@ -1,4 +1,7 @@
 import express from "express";
+import { readFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 const router = express.Router();
 
 import {
@@ -17,7 +20,6 @@ import { withAuth } from "../middleware/auth.js";
 import ImgUpload from "../middleware/imgUpload.js";
 import Multer from "multer";
 import swaggerUi from "swagger-ui-express";
-import authRoutesSwagger from "../swagger/authRoutesSwagger.json" assert { type: "json" };
 
 const multer = Multer({
   storage: Multer.memoryStorage(),
@@ -25,6 +27,12 @@ const multer = Multer({
     fileSize: 25 * 1024 * 1024, // no larger than 5mb, you can change as needed.
   },
 });
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const authRoutesSwagger = JSON.parse(
+  readFileSync(join(__dirname, "../swagger/authRoutesSwagger.json"), "utf8")
+);
+
 router.route("/createUser").post(CreateUser);
 router.route("/login").post(login);
 router.route("/allUsers").get(withAuth, allUsers);
